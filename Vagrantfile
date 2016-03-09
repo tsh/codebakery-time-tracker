@@ -1,6 +1,14 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+system("
+    if [ #{ARGV[0]} = 'up' ]; then
+        echo 'Attempting to start app. If there was no change to dependencies you should see result on forwarded port'
+        cd /vagrant
+        python3.5 main.py
+    fi
+")
+
 Vagrant.configure(2) do |config|
   config.vm.box = "ubuntu/wily64"
 
