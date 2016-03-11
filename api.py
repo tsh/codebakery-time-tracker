@@ -1,8 +1,12 @@
-from flask import jsonify, Blueprint
+from flask import jsonify, Blueprint, url_for
 
-api = Blueprint('api', __name__, url_prefix='/api/')
+from app import create_app
+
+app = create_app()
+
+users_api = Blueprint('users_api', __name__, url_prefix='/api/users')
 
 
-@api.route('hello')
-def hello():
+@users_api.route('/')
+def users():
     return 'hello'
