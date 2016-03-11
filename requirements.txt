@@ -3,3 +3,4 @@ ipython
 itsdangerous
 Flask
 Flask-SQLAlchemy
+Flask-Testing
