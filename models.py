@@ -1,14 +1,28 @@
 import datetime
 
+from flask import url_for
+
 from app import db
 
 class User(db.Model):
     __tablename__ = 'users'
 
-    id = db.Column(db.Integer)
-    username = db.Column(db.String(64), primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(64))
     records = db.relationship('Record', backref='user', lazy='dynamic')
     password_hash = db.Column(db.String(128))
+
+    def __repr__(self):
+        return "<User: {}>".format(self.username)
+
+    def get_url(self):
+        return url_for('users_api.get_user', id=self.id, _external=True)
+
+    def export_data(self):
+        return {
+            'self_url': self.get_url(),
+            'username': self.username
+        }
 
 
 class Record(db.Model):
