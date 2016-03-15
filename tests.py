@@ -1,10 +1,10 @@
 import unittest
 
-from flask import url_for
+from flask import url_for, json
 
 from app import create_app, db
-from models import User
-from api import users_api
+from models import User, Record
+from api import users_api, records_api
 
 app = create_app()
 
@@ -28,6 +28,17 @@ class TestCase(unittest.TestCase):
             self.assertEqual(resp.status_code, 200)
             self.assertIn(url_for('users_api.get_user', id=user.id), str(resp.data))
 
+    def test_create_report(self):
+        record_data = {'description': 'test description',
+                       'time_spent': 4}
+        resp = self.client.post('api/reports/', data=json.dumps(record_data),
+                                headers={'Content-Type': 'application/json'})
+        self.assertEqual(resp.status_code, 201)
+        with app.app_context():
+            record = Record.query.all()[0]
+            self.assertEqual(record.description, record_data['description'])
+            self.assertEqual(record.time_spent, record_data['time_spent'])
+
     def tearDown(self):
         db.session.remove()
         with app.app_context():
@@ -35,4 +46,5 @@ class TestCase(unittest.TestCase):
 
 if __name__ == '__main__':
     app.register_blueprint(users_api)
+    app.register_blueprint(records_api)
     unittest.main()

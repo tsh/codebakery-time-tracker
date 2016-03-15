@@ -36,6 +36,15 @@ class Record(db.Model):
     description = db.Column(db.String())
     timestamp = db.Column(db.DateTime, default=datetime.datetime.now)
 
+    def import_data(self, data):
+        self.description = data['description']
+        self.time_spent = data['time_spent']
+        return self
+
+    def get_url(self):
+        # TODO: implement me
+        return 'not implemented'
+
 
 class Project(db.Model):
     __tablename__ = 'projects'
