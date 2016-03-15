@@ -2,5 +2,6 @@ ipdb
 ipython
 itsdangerous
 Flask
+Flask-HTTPAuth
 Flask-SQLAlchemy
 Flask-Testing

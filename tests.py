@@ -4,7 +4,7 @@ from flask import url_for, json
 
 from app import create_app, db
 from models import User, Record
-from api import users_api, records_api
+from api import users_api, records_api, auth_api
 
 app = create_app()
 
@@ -39,6 +39,10 @@ class TestCase(unittest.TestCase):
             self.assertEqual(record.description, record_data['description'])
             self.assertEqual(record.time_spent, record_data['time_spent'])
 
+    def test_get_token(self):
+        resp = self.client.get('api/auth/')
+        self.assertEqual(resp.status_code, 200)
+
     def tearDown(self):
         db.session.remove()
         with app.app_context():
@@ -47,4 +51,5 @@ class TestCase(unittest.TestCase):
 if __name__ == '__main__':
     app.register_blueprint(users_api)
     app.register_blueprint(records_api)
+    app.register_blueprint(auth_api)
     unittest.main()
