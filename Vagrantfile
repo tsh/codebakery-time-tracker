@@ -60,5 +60,14 @@ Vagrant.configure(2) do |config|
     cd /vagrant
     sudo python3.5 -m pip install -r requirements.txt
 
+    sudo apt-get -y install golang
+
+    export PATH=$PATH:/usr/local/go/bin
+    mkdir ~vagrant/work
+
+    export GOPATH=~vagrant/work
+    export PATH=$PATH:$GOPATH/bin
+    go get github.com/gorilla/websocket
+
   SHELL
 end
