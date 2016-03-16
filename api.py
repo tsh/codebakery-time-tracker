@@ -3,7 +3,7 @@ from flask.ext.httpauth import HTTPBasicAuth
 import itsdangerous
 
 from app import create_app, db
-from models import User, Record
+from models import User, Record, Project
 
 
 app = create_app()
@@ -11,7 +11,8 @@ auth = HTTPBasicAuth()
 
 users_api = Blueprint('users_api', 'users_api', url_prefix='/api/users/')
 records_api = Blueprint('records_api', 'records_api', url_prefix='/api/records/')
-auth_api = Blueprint('auth_api', 'auth_api', url_prefix='/api/auth/')  # TODO: remove me
+auth_api = Blueprint('auth_api', 'auth_api', url_prefix='/api/auth/')
+projects_api = Blueprint('projects_api', 'projects_api', url_prefix='/api/projects/')
 
 
 @auth.verify_password
@@ -59,3 +60,13 @@ def create_report():
     db.session.add(record)
     db.session.commit()
     return jsonify({}), 201, {'Location': record.get_url()}
+
+
+@projects_api.route('/', methods=['POST'])
+@auth.login_required
+def create_project():
+    project = Project()
+    project.import_data(request.json)
+    db.session.add(project)
+    db.session.commit()
+    return jsonify({}), 201, {'Location': project.get_url()}

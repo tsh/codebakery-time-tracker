@@ -53,7 +53,7 @@ class Record(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    project = db.Column(db.Integer, db.ForeignKey('projects.id'))
+    project_id = db.Column(db.Integer, db.ForeignKey('projects.id'))
     ticket = db.Column(db.Integer)
     time_spent = db.Column(db.Numeric(precision=3))
     description = db.Column(db.String())
@@ -74,3 +74,11 @@ class Project(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256))
+
+    def import_data(self, data):
+        self.name = data['name']
+        return self
+
+    def get_url(self):
+        # TODO: implement me
+        return 'not implemented'

@@ -4,8 +4,8 @@ import unittest
 from flask import url_for, json
 
 from app import create_app, db
-from models import User, Record
-from api import users_api, records_api, auth_api
+from models import User, Record, Project
+from api import users_api, records_api, auth_api, projects_api
 
 app = create_app()
 
@@ -55,6 +55,17 @@ class TestCase(unittest.TestCase):
             self.assertEqual(record.time_spent, record_data['time_spent'])
             self.assertEqual(record.user.id, self.user.id)
 
+    def test_create_project(self):
+        project_data = {'name': 'new project'}
+        resp = self.client.post('api/projects/', data=json.dumps(project_data),
+                                headers={'Content-Type': 'application/json',
+                                         'Authorization': b'Basic ' + base64.b64encode(b'test:test')})
+        self.assertEqual(resp.status_code, 201)
+        with app.app_context():
+            project = Project.query.all()[0]
+            self.assertEqual(project.name, project_data['name'])
+
+
     def test_get_token(self):
         resp = self.client.get('api/auth/', headers={'Authorization': b'Basic ' + base64.b64encode(b'test:test')})
         self.assertEqual(resp.status_code, 200)
@@ -69,4 +80,5 @@ if __name__ == '__main__':
     app.register_blueprint(users_api)
     app.register_blueprint(records_api)
     app.register_blueprint(auth_api)
+    app.register_blueprint(projects_api)
     unittest.main()
