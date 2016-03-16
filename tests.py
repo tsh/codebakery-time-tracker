@@ -1,3 +1,4 @@
+import base64
 import unittest
 
 from flask import url_for, json
@@ -16,6 +17,10 @@ class TestCase(unittest.TestCase):
         db.init_app(app)
         with app.app_context():
             db.create_all()
+            self.user = User(username="test")
+            self.user.set_password('test')
+            db.session.add(self.user)
+            db.session.commit()
         app.testing = True
         self.client = app.test_client()
 
@@ -32,16 +37,19 @@ class TestCase(unittest.TestCase):
         record_data = {'description': 'test description',
                        'time_spent': 4}
         resp = self.client.post('api/reports/', data=json.dumps(record_data),
-                                headers={'Content-Type': 'application/json'})
+                                headers={'Content-Type': 'application/json',
+                                         'Authorization': b'Basic ' + base64.b64encode(b'test:test')})
         self.assertEqual(resp.status_code, 201)
         with app.app_context():
             record = Record.query.all()[0]
             self.assertEqual(record.description, record_data['description'])
             self.assertEqual(record.time_spent, record_data['time_spent'])
+            self.assertEqual(record.user.id, self.user.id)
 
     def test_get_token(self):
-        resp = self.client.get('api/auth/')
+        resp = self.client.get('api/auth/', headers={'Authorization': b'Basic ' + base64.b64encode(b'test:test')})
         self.assertEqual(resp.status_code, 200)
+        self.assertIn('token', str(resp.data))
 
     def tearDown(self):
         db.session.remove()

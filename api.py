@@ -16,7 +16,6 @@ auth_api = Blueprint('auth_api', 'auth_api', url_prefix='/api/auth/')  # TODO: r
 
 @auth.verify_password
 def verify_password(username_or_token, password=None):
-    import ipdb; ipdb.set_trace()
     # first try to authenticate by token
     try:
         user = User.verify_auth_token(username_or_token)
@@ -48,8 +47,10 @@ def get_user(id):
 
 
 @records_api.route('/', methods=['POST'])
+@auth.login_required
 def create_report():
-    record = Record()
+    user = g.user
+    record = Record(user=user)
     record.import_data(request.json)
     db.session.add(record)
     db.session.commit()
