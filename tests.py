@@ -33,10 +33,19 @@ class TestCase(unittest.TestCase):
             self.assertEqual(resp.status_code, 200)
             self.assertIn(url_for('users_api.get_user', id=user.id), str(resp.data))
 
-    def test_create_report(self):
+    def test_get_records(self):
+        record = Record()
+        with app.app_context():
+            db.session.add(record)
+            db.session.commit()
+            resp = self.client.get('api/records/')
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn(record.get_url(), str(resp.data))
+
+    def test_create_record(self):
         record_data = {'description': 'test description',
                        'time_spent': 4}
-        resp = self.client.post('api/reports/', data=json.dumps(record_data),
+        resp = self.client.post('api/records/', data=json.dumps(record_data),
                                 headers={'Content-Type': 'application/json',
                                          'Authorization': b'Basic ' + base64.b64encode(b'test:test')})
         self.assertEqual(resp.status_code, 201)

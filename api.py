@@ -10,7 +10,7 @@ app = create_app()
 auth = HTTPBasicAuth()
 
 users_api = Blueprint('users_api', 'users_api', url_prefix='/api/users/')
-records_api = Blueprint('records_api', 'records_api', url_prefix='/api/reports/')
+records_api = Blueprint('records_api', 'records_api', url_prefix='/api/records/')
 auth_api = Blueprint('auth_api', 'auth_api', url_prefix='/api/auth/')  # TODO: remove me
 
 
@@ -35,7 +35,6 @@ def get_auth_token():
     return jsonify({'token': token})
 
 
-
 @users_api.route('/', methods=['GET'])
 def users():
     return jsonify({'users': [user.get_url() for user in User.query.all()]})
@@ -44,6 +43,11 @@ def users():
 @users_api.route('<int:id>', methods=['GET'])
 def get_user(id):
     return jsonify(User.query.get_or_404(id).export_data())
+
+
+@records_api.route('/', methods=['GET'])
+def reports():
+    return jsonify({'records': [record.get_url() for record in Record.query.all()]})
 
 
 @records_api.route('/', methods=['POST'])
