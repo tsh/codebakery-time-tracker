@@ -4,6 +4,7 @@ import (
 	"github.com/gorilla/websocket"
 	"net/http"
 	"fmt"
+	"log"
 )
 
 var upgrader = websocket.Upgrader{
@@ -11,30 +12,23 @@ var upgrader = websocket.Upgrader{
 	WriteBufferSize: 1024,
 }
 
-func print_binary(s []byte) {
-	fmt.Printf("Received b:");
-	for n := 0; n < len(s); n++ {
-		fmt.Printf("%d,", s[n]);
-	}
-	fmt.Printf("\n");
-}
 
 func echoHandler(w http.ResponseWriter, r *http.Request) {
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		//log.Println(err)
+		log.Println(err)
 		return
 	}
 
 	for {
-		messageType, p, err := conn.ReadMessage()
+		messageType, message, err := conn.ReadMessage()
 		if err != nil {
 			return
 		}
 
-		print_binary(p)
+		fmt.Printf("recv: %s\n", message)
 
-		err = conn.WriteMessage(messageType, p);
+		err = conn.WriteMessage(messageType, message);
 		if err != nil {
 			return
 		}

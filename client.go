@@ -5,6 +5,7 @@ import (
 	"log"
 	"flag"
 	"net/url"
+	"fmt"
 )
 
 func main(){
@@ -14,5 +15,24 @@ func main(){
 	if err != nil {
 		log.Fatal("dial:", err)
 	}
-	defer c.Close()
+
+	done := make(chan bool)
+
+	go func() {
+		for {
+			_, msg, err := c.ReadMessage()
+			if err != nil{
+				log.Println("err %s", err)
+			}
+			fmt.Printf("recv: %s", msg)
+		}
+		done <- true
+	}()
+
+
+	err = c.WriteMessage(websocket.TextMessage, []byte("Hello"))
+	if err != nil {
+		fmt.Print("error sending message")
+	}
+	<-done
 }
