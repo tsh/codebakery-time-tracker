@@ -63,10 +63,9 @@ Vagrant.configure(2) do |config|
     sudo apt-get -y install golang
 
     export PATH=$PATH:/usr/local/go/bin
+    echo "export GOPATH=/home/vagrant/work/" >> ~/.profile
     mkdir ~vagrant/work
 
-    export GOPATH=~vagrant/work
-    export PATH=$PATH:$GOPATH/bin
     go get github.com/gorilla/websocket
 
   SHELL

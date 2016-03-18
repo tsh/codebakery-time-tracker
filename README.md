@@ -12,4 +12,4 @@ after process is finished do:
 > python3.5 main.py
 ```
 
-Then check the localhost:8000 in your local browser.
+Then check the localhost:8000 in your browser.

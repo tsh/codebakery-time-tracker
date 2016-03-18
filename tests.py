@@ -14,33 +14,31 @@ class TestCase(unittest.TestCase):
     def setUp(self):
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
         app.config['SERVER_NAME'] = 'test'
+        ctx = app.app_context()
+        ctx.push()
         db.init_app(app)
-        with app.app_context():
-            db.create_all()
-            self.user = User(username="test")
-            self.user.set_password('test')
-            db.session.add(self.user)
-            db.session.commit()
-        app.testing = True
+        db.create_all()
+        self.user = User(username="test")
+        self.user.set_password('test')
+        db.session.add(self.user)
+        db.session.commit()
         self.client = app.test_client()
 
     def test_users(self):
         user = User(username="username")
-        with app.app_context():
-            db.session.add(user)
-            db.session.commit()
-            resp = self.client.get('api/users/')
-            self.assertEqual(resp.status_code, 200)
-            self.assertIn(url_for('users_api.get_user', id=user.id), str(resp.data))
+        db.session.add(user)
+        db.session.commit()
+        resp = self.client.get('api/users/')
+        self.assertEqual(resp.status_code, 200)
+        self.assertIn(url_for('users_api.get_user', id=user.id), str(resp.data))
 
     def test_get_records(self):
         record = Record()
-        with app.app_context():
-            db.session.add(record)
-            db.session.commit()
-            resp = self.client.get('api/records/')
-            self.assertEqual(resp.status_code, 200)
-            self.assertIn(record.get_url(), str(resp.data))
+        db.session.add(record)
+        db.session.commit()
+        resp = self.client.get('api/records/')
+        self.assertEqual(resp.status_code, 200)
+        self.assertIn(record.get_url(), str(resp.data))
 
     def test_create_record(self):
         record_data = {'description': 'test description',
@@ -49,11 +47,10 @@ class TestCase(unittest.TestCase):
                                 headers={'Content-Type': 'application/json',
                                          'Authorization': b'Basic ' + base64.b64encode(b'test:test')})
         self.assertEqual(resp.status_code, 201)
-        with app.app_context():
-            record = Record.query.all()[0]
-            self.assertEqual(record.description, record_data['description'])
-            self.assertEqual(record.time_spent, record_data['time_spent'])
-            self.assertEqual(record.user.id, self.user.id)
+        record = Record.query.all()[0]
+        self.assertEqual(record.description, record_data['description'])
+        self.assertEqual(record.time_spent, record_data['time_spent'])
+        self.assertEqual(record.user.id, self.user.id)
 
     def test_create_project(self):
         project_data = {'name': 'new project'}
@@ -61,9 +58,8 @@ class TestCase(unittest.TestCase):
                                 headers={'Content-Type': 'application/json',
                                          'Authorization': b'Basic ' + base64.b64encode(b'test:test')})
         self.assertEqual(resp.status_code, 201)
-        with app.app_context():
-            project = Project.query.all()[0]
-            self.assertEqual(project.name, project_data['name'])
+        project = Project.query.all()[0]
+        self.assertEqual(project.name, project_data['name'])
 
 
     def test_get_token(self):
