@@ -56,6 +56,8 @@ Vagrant.configure(2) do |config|
     fi
 
     sudo apt-get -y install postgresql libpq-dev
+    sudo -u postgres createuser vagrant
+    sudo -u postgres createdb -O vagrant time-tracker
 
     cd /vagrant
     sudo python3.5 -m pip install -r requirements.txt
