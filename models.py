@@ -16,6 +16,7 @@ class User(db.Model):
     username = db.Column(db.String(64))
     records = db.relationship('Record', backref='user', lazy='dynamic')
     password_hash = db.Column(db.String(128))
+    timestamp = db.Column(db.DateTime, default=datetime.datetime.now)
 
     def __repr__(self):
         return "<User: {}>".format(self.username)
@@ -74,6 +75,7 @@ class Project(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256))
+    timestamp = db.Column(db.DateTime, default=datetime.datetime.now)
 
     def import_data(self, data):
         self.name = data['name']
