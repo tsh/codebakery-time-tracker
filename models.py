@@ -1,5 +1,7 @@
 import datetime
 
+import dateutil.parser
+
 from flask import url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
@@ -55,6 +57,7 @@ class Record(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     project_id = db.Column(db.Integer, db.ForeignKey('projects.id'))
+    date = db.Column(db.Date)
     ticket = db.Column(db.Integer)
     time_spent = db.Column(db.Numeric(precision=3))
     description = db.Column(db.String())
@@ -63,6 +66,8 @@ class Record(db.Model):
     def import_data(self, data):
         self.description = data['description']
         self.time_spent = data['time_spent']
+        self.ticket = data['ticket']
+        self.date = dateutil.parser.parse(data['date'])
         return self
 
     def get_url(self):

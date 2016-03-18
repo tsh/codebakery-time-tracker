@@ -1,4 +1,5 @@
 import base64
+import datetime
 import unittest
 
 from flask import url_for, json
@@ -42,7 +43,10 @@ class TestCase(unittest.TestCase):
 
     def test_create_record(self):
         record_data = {'description': 'test description',
-                       'time_spent': 4}
+                       'time_spent': 4,
+                       'ticket': 22,
+                       'date': '2016-03-18'
+                       }
         resp = self.client.post('api/records/', data=json.dumps(record_data),
                                 headers={'Content-Type': 'application/json',
                                          'Authorization': b'Basic ' + base64.b64encode(b'test:test')})
@@ -50,6 +54,8 @@ class TestCase(unittest.TestCase):
         record = Record.query.all()[0]
         self.assertEqual(record.description, record_data['description'])
         self.assertEqual(record.time_spent, record_data['time_spent'])
+        self.assertEqual(record.ticket, record_data['ticket'])
+        self.assertEqual(record.date, datetime.date(2016, 3, 18))
         self.assertEqual(record.user.id, self.user.id)
 
     def test_create_project(self):
