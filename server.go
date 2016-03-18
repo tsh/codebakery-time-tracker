@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gorilla/websocket"
+	"encoding/json"
 	"net/http"
 	"fmt"
 	"log"
@@ -28,7 +29,10 @@ func echoHandler(w http.ResponseWriter, r *http.Request) {
 
 		fmt.Printf("recv: %s\n", message)
 
-		err = conn.WriteMessage(messageType, message);
+		response := map[string]string {"username": "username", "message": string(message)}
+		jsonResponse, _ := json.Marshal(response)
+
+		err = conn.WriteMessage(messageType, jsonResponse);
 		if err != nil {
 			return
 		}
