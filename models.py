@@ -15,6 +15,7 @@ class User(db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
+    company_id = db.Column(db.Integer, db.ForeignKey('companies.id'))
     username = db.Column(db.String(64))
     records = db.relationship('Record', backref='user', lazy='dynamic')
     password_hash = db.Column(db.String(128))
@@ -49,6 +50,13 @@ class User(db.Model):
             'self_url': self.get_url(),
             'username': self.username
         }
+
+
+class Company(db.Model):
+    __tablename__ = 'companies'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(128))
 
 
 class Record(db.Model):
@@ -89,6 +97,7 @@ class Project(db.Model):
     __tablename__ = 'projects'
 
     id = db.Column(db.Integer, primary_key=True)
+    company_id = db.Column(db.Integer, db.ForeignKey('companies.id'))
     name = db.Column(db.String(256))
     timestamp = db.Column(db.DateTime, default=datetime.datetime.now)
 
@@ -99,3 +108,16 @@ class Project(db.Model):
     def get_url(self):
         # TODO: implement me
         return 'not implemented'
+
+
+class DayOff(db.Model):
+    """
+    Which day is counted as day off. Holiday, weekends, etc.
+    """
+    __tablename__ = 'days_off'
+
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.Date)
+    description = db.Column(db.String(512))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    company_id = db.Column(db.Integer, db.ForeignKey('companies.id'))
