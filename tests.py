@@ -58,6 +58,14 @@ class TestCase(unittest.TestCase):
         self.assertEqual(record.date, datetime.date(2016, 3, 18))
         self.assertEqual(record.user.id, self.user.id)
 
+    def test_record_detail(self):
+        record = Record(time_spent=8.5)
+        db.session.add(record)
+        db.session.commit()
+        resp = self.client.get('api/records/{}'.format(record.id))
+        self.assertEqual(resp.status_code, 200, msg=resp.data)
+        self.assertIn(str(record.time_spent), str(resp.data))
+
     def test_create_project(self):
         project_data = {'name': 'new project'}
         resp = self.client.post('api/projects/', data=json.dumps(project_data),

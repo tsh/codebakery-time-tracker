@@ -70,9 +70,19 @@ class Record(db.Model):
         self.date = dateutil.parser.parse(data['date'])
         return self
 
+    def export_data(self):
+        return {
+            'self_url': self.get_url(),
+            'user': self.user,
+            'project': self.project_id,
+            'date': self.date,
+            'ticket': self.ticket,
+            'time_spent': self.time_spent,
+            'description': self.description
+        }
+
     def get_url(self):
-        # TODO: implement me
-        return 'not implemented'
+        return url_for('records_api.record_detail', id=self.id, _external=True)
 
 
 class Project(db.Model):

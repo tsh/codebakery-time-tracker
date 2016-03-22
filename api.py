@@ -62,6 +62,12 @@ def create_report():
     return jsonify({}), 201, {'Location': record.get_url()}
 
 
+@records_api.route('<int:id>', methods=['GET'])
+def record_detail(id):
+    return jsonify(Record.query.get_or_404(id).export_data())
+
+# PROJECTS
+
 @projects_api.route('/', methods=['POST'])
 @auth.login_required
 def create_project():
