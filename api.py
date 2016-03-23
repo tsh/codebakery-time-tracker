@@ -15,6 +15,8 @@ auth_api = Blueprint('auth_api', 'auth_api', url_prefix='/api/auth/')
 projects_api = Blueprint('projects_api', 'projects_api', url_prefix='/api/projects/')
 
 
+# AUTH
+
 @auth.verify_password
 def verify_password(username_or_token, password=None):
     # first try to authenticate by token
@@ -36,6 +38,9 @@ def get_auth_token():
     return jsonify({'token': token})
 
 
+# USERS
+
+
 @users_api.route('/', methods=['GET'])
 def users():
     return jsonify({'users': [user.get_url() for user in User.query.all()]})
@@ -44,6 +49,9 @@ def users():
 @users_api.route('<int:id>', methods=['GET'])
 def get_user(id):
     return jsonify(User.query.get_or_404(id).export_data())
+
+
+# REPORTS
 
 
 @records_api.route('/', methods=['GET'])
@@ -66,7 +74,9 @@ def create_report():
 def record_detail(id):
     return jsonify(Record.query.get_or_404(id).export_data())
 
+
 # PROJECTS
+
 
 @projects_api.route('/', methods=['POST'])
 @auth.login_required
@@ -76,3 +86,9 @@ def create_project():
     db.session.add(project)
     db.session.commit()
     return jsonify({}), 201, {'Location': project.get_url()}
+
+
+@projects_api.route('<int:id>', methods=['GET'])
+@auth.login_required
+def project_detail(id):
+    return jsonify(Project.query.get_or_404(id).export_data())

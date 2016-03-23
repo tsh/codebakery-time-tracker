@@ -105,6 +105,11 @@ class Project(db.Model):
         self.name = data['name']
         return self
 
+    def export_data(self):
+        return {
+            'name': self.name
+        }
+
     def get_url(self):
         # TODO: implement me
         return 'not implemented'

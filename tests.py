@@ -121,6 +121,15 @@ class TestProjects(unittest.TestCase):
         project = Project.query.all()[0]
         self.assertEqual(project.name, project_data['name'])
 
+    def test_project_detail(self):
+        project = Project(name='prj')
+        db.session.add(project)
+        db.session.commit()
+        resp = self.client.get('/api/projects/{}'.format(project.id), headers={'Content-Type': 'application/json',
+                                         'Authorization': b'Basic ' + base64.b64encode(b'test:test')})
+        self.assertEqual(resp.status_code, 200, msg=resp.data)
+        self.assertIn(project.name, str(resp.data))
+
     def tearDown(self):
         db.session.remove()
         with app.app_context():
