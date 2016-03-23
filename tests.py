@@ -31,7 +31,12 @@ class TestUsers(unittest.TestCase):
         db.session.commit()
         resp = self.client.get('api/users/')
         self.assertEqual(resp.status_code, 200)
-        self.assertIn(url_for('users_api.get_user', id=user.id), str(resp.data))
+        self.assertIn(url_for('users_api.get_user', id=self.user.id), str(resp.data))
+
+    def test_user_detail(self):
+        resp = self.client.get('/api/users/{}'.format(self.user.id))
+        self.assertEqual(resp.status_code, 200, msg=resp.data)
+        self.assertIn(self.user.username, str(resp.data))
 
     def test_get_token(self):
         resp = self.client.get('api/auth/', headers={'Authorization': b'Basic ' + base64.b64encode(b'test:test')})
