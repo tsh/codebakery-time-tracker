@@ -9,12 +9,12 @@ from models import User, Record, Project
 from api import users_api, records_api, auth_api, projects_api
 
 app = create_app()
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+app.config['SERVER_NAME'] = 'test'
 
 
-class TestCase(unittest.TestCase):
+class TestUsers(unittest.TestCase):
     def setUp(self):
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-        app.config['SERVER_NAME'] = 'test'
         ctx = app.app_context()
         ctx.push()
         db.init_app(app)
@@ -32,6 +32,29 @@ class TestCase(unittest.TestCase):
         resp = self.client.get('api/users/')
         self.assertEqual(resp.status_code, 200)
         self.assertIn(url_for('users_api.get_user', id=user.id), str(resp.data))
+
+    def test_get_token(self):
+        resp = self.client.get('api/auth/', headers={'Authorization': b'Basic ' + base64.b64encode(b'test:test')})
+        self.assertEqual(resp.status_code, 200)
+        self.assertIn('token', str(resp.data))
+
+    def tearDown(self):
+        db.session.remove()
+        with app.app_context():
+            db.drop_all()
+
+
+class TestRecords(unittest.TestCase):
+    def setUp(self):
+        ctx = app.app_context()
+        ctx.push()
+        db.init_app(app)
+        db.create_all()
+        self.user = User(username="test")
+        self.user.set_password('test')
+        db.session.add(self.user)
+        db.session.commit()
+        self.client = app.test_client()
 
     def test_get_records(self):
         record = Record()
@@ -66,6 +89,24 @@ class TestCase(unittest.TestCase):
         self.assertEqual(resp.status_code, 200, msg=resp.data)
         self.assertIn(str(record.time_spent), str(resp.data))
 
+    def tearDown(self):
+        db.session.remove()
+        with app.app_context():
+            db.drop_all()
+
+
+class TestProjects(unittest.TestCase):
+    def setUp(self):
+        ctx = app.app_context()
+        ctx.push()
+        db.init_app(app)
+        db.create_all()
+        self.user = User(username="test")
+        self.user.set_password('test')
+        db.session.add(self.user)
+        db.session.commit()
+        self.client = app.test_client()
+
     def test_create_project(self):
         project_data = {'name': 'new project'}
         resp = self.client.post('api/projects/', data=json.dumps(project_data),
@@ -75,16 +116,11 @@ class TestCase(unittest.TestCase):
         project = Project.query.all()[0]
         self.assertEqual(project.name, project_data['name'])
 
-
-    def test_get_token(self):
-        resp = self.client.get('api/auth/', headers={'Authorization': b'Basic ' + base64.b64encode(b'test:test')})
-        self.assertEqual(resp.status_code, 200)
-        self.assertIn('token', str(resp.data))
-
     def tearDown(self):
         db.session.remove()
         with app.app_context():
             db.drop_all()
+
 
 if __name__ == '__main__':
     app.register_blueprint(users_api)
