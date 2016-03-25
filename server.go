@@ -14,12 +14,18 @@ var upgrader = websocket.Upgrader{
 }
 
 
+var connections = make(map[*websocket.Conn]bool)
+
+
 func echoHandler(w http.ResponseWriter, r *http.Request) {
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Println(err)
 		return
 	}
+
+	connections[conn] = true
+	fmt.Print(connections)
 
 	for {
 		messageType, message, err := conn.ReadMessage()
