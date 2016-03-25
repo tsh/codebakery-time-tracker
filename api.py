@@ -60,6 +60,15 @@ def get_user(id):
     return jsonify(User.query.get_or_404(id).export_data())
 
 
+@users_api.route('<int:id>/change-password/', methods=['POST'])
+@auth.login_required
+def user_change_password(id):
+    user = User.query.get_or_404(id)
+    user.change_password(old_password=request.json['password'],
+                         new_password=request.json['new_password'])
+    return jsonify({}), 205
+
+
 # REPORTS
 
 

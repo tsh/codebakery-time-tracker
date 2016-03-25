@@ -3,8 +3,6 @@ import os
 from flask import Flask, url_for, jsonify, request
 from flask.ext.sqlalchemy import SQLAlchemy
 
-# from models import User, Record
-
 db = SQLAlchemy(session_options={'expire_on_commit': False})
 
 

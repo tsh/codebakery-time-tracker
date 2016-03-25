@@ -20,7 +20,8 @@ class TestUsers(unittest.TestCase):
         db.init_app(app)
         db.create_all()
         self.user = User(username="test")
-        self.user.set_password('test')
+        self.user_password = 'test'
+        self.user.set_password(self.user_password)
         db.session.add(self.user)
         db.session.commit()
         self.client = app.test_client()
@@ -51,6 +52,51 @@ class TestUsers(unittest.TestCase):
         resp = self.client.get('api/auth/', headers={'Authorization': b'Basic ' + base64.b64encode(b'test:test')})
         self.assertEqual(resp.status_code, 200)
         self.assertIn('token', str(resp.data))
+
+    def tearDown(self):
+        db.session.remove()
+        with app.app_context():
+            db.drop_all()
+
+
+class TestUserChangePassword(unittest.TestCase):
+    def setUp(self):
+        ctx = app.app_context()
+        ctx.push()
+        db.init_app(app)
+        db.create_all()
+        self.user = User(username="test")
+        self.user_password = 'test'
+        self.user.set_password(self.user_password)
+        db.session.add(self.user)
+        db.session.commit()
+        self.client = app.test_client()
+
+    def test_change_password(self):
+        new_password = 'new_password'
+        self.assertFalse(self.user.verify_password(new_password))
+        resp = self.client.post('api/users/{}/change-password/'.format(self.user.id),
+                                data=json.dumps({'password': self.user_password,
+                                                 'new_password': new_password}),
+                                headers={'Content-Type': 'application/json',
+                                         'Authorization': b'Basic ' + base64.b64encode(b'test:test')})
+        self.assertEqual(resp.status_code, 205, msg=resp.data)
+        self.assertTrue(self.user.verify_password(new_password))
+
+    def test_change_password_for_other_user_not_allowed(self):
+        other_user = User(username='other_user')
+        other_user_password = 'other_user_password'
+        other_user.set_password(other_user_password)
+        db.session.add(other_user)
+        db.session.commit()
+        resp = self.client.post('api/users/{}/change-password/'.format(self.user.id),
+                                data=json.dumps({'password': other_user_password,
+                                                 'new_password': 'some_password'}),
+                                headers={'Content-Type': 'application/json',
+                                         'Authorization': b'Basic ' + base64.b64encode(b'test:test')})
+        self.assertEqual(resp.status_code, 403)
+        self.assertTrue(other_user.verify_password(other_user_password))
+
 
     def tearDown(self):
         db.session.remove()
