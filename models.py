@@ -42,8 +42,14 @@ class User(db.Model):
         data = s.loads(token)
         return User.query.get(data['id'])
 
+    # Other
+
     def get_url(self):
         return url_for('users_api.get_user', id=self.id, _external=True)
+
+    def import_data(self, data):
+        self.username = data['username']
+        return self
 
     def export_data(self):
         return {

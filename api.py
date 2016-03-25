@@ -46,6 +46,15 @@ def users():
     return jsonify({'users': [user.get_url() for user in User.query.all()]})
 
 
+@users_api.route('/', methods=['POST'])
+def create_user():
+    user = User()
+    user.import_data(request.json)
+    db.session.add(user)
+    db.session.commit()
+    return jsonify({}), 201, {'Location': user.get_url()}
+
+
 @users_api.route('<int:id>', methods=['GET'])
 def get_user(id):
     return jsonify(User.query.get_or_404(id).export_data())

@@ -25,13 +25,22 @@ class TestUsers(unittest.TestCase):
         db.session.commit()
         self.client = app.test_client()
 
-    def test_users(self):
+    def test_get_users(self):
         user = User(username="username")
         db.session.add(user)
         db.session.commit()
         resp = self.client.get('api/users/')
         self.assertEqual(resp.status_code, 200)
         self.assertIn(url_for('users_api.get_user', id=self.user.id), str(resp.data))
+
+    def test_post_users(self):
+        user_data = {
+            'username': 'new_user'
+        }
+        resp = self.client.post('api/users/', data=json.dumps(user_data),
+                                headers={'Content-Type': 'application/json'})
+        self.assertEqual(resp.status_code, 201)
+        self.assertEqual(1, len(db.session.query(User).filter(User.username == user_data['username']).all()))
 
     def test_user_detail(self):
         resp = self.client.get('/api/users/{}'.format(self.user.id))
