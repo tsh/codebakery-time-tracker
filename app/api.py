@@ -1,12 +1,11 @@
-from flask import jsonify, Blueprint, url_for, request, g
+from flask import jsonify, Blueprint, url_for, request, g, current_app
 from flask.ext.httpauth import HTTPBasicAuth
 import itsdangerous
 
-from app import create_app, db
+from app import db
 from .models import User, Record, Project
 
 
-app = create_app()
 auth = HTTPBasicAuth()
 
 users_api = Blueprint('users_api', 'users_api', url_prefix='/api/users/')

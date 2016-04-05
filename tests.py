@@ -7,8 +7,10 @@ from flask import url_for, json
 from app import create_app, db
 from app.models import User, Record, Project
 from app.api import users_api, records_api, auth_api, projects_api
+from config import TestConfig
 
-app = create_app()
+
+app = create_app(TestConfig())
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
 app.config['SERVER_NAME'] = 'test'
 

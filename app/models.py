@@ -2,13 +2,12 @@ import datetime
 
 import dateutil.parser
 
-from flask import url_for, abort
+from flask import url_for, abort, current_app
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
 from . import db, create_app
 
-app = create_app()
 
 
 class User(db.Model):
@@ -39,12 +38,12 @@ class User(db.Model):
             abort(403)  # TODO: it should return json
 
     def generate_auth_token(self, expires_in=3600):
-        s = Serializer(app.config['SECRET_KEY'], expires_in=expires_in)
+        s = Serializer(current_app.config['SECRET_KEY'], expires_in=expires_in)
         return s.dumps({'id': self.id}).decode('utf-8')
 
     @staticmethod
     def verify_auth_token(token):
-        s = Serializer(app.config['SECRET_KEY'])
+        s = Serializer(current_app.config['SECRET_KEY'])
         data = s.loads(token)
         return User.query.get(data['id'])
 

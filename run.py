@@ -2,14 +2,12 @@ from flask import jsonify, url_for
 
 from app import create_app, db
 from app.api import users_api, records_api, auth_api, projects_api
+from config import DevelopmentConfig
 
-app = create_app()
-
-@app.route('/')
-def landing():
-    return jsonify({'api': [url_for('users_api.users', _external=True)]})
 
 if __name__ == '__main__':
+    dev_config = DevelopmentConfig()
+    app = create_app(dev_config)
     with app.app_context():
         db.create_all()
     app.register_blueprint(users_api)
