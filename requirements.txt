@@ -3,7 +3,10 @@ psycopg2
 ipdb
 ipython
 itsdangerous
+flask-marshmallow
 Flask
 Flask-HTTPAuth
 Flask-SQLAlchemy
 Flask-Testing
+marshmallow
+marshmallow-sqlalchemy
