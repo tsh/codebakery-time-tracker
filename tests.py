@@ -5,8 +5,8 @@ import unittest
 from flask import url_for, json
 
 from app import create_app, db
-from models import User, Record, Project
-from api import users_api, records_api, auth_api, projects_api
+from app.models import User, Record, Project
+from app.api import users_api, records_api, auth_api, projects_api
 
 app = create_app()
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'

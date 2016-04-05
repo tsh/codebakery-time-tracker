@@ -3,7 +3,7 @@ from flask.ext.httpauth import HTTPBasicAuth
 import itsdangerous
 
 from app import create_app, db
-from models import User, Record, Project
+from .models import User, Record, Project
 
 
 app = create_app()

@@ -1,7 +1,7 @@
 from flask import jsonify, url_for
 
 from app import create_app, db
-from api import users_api, records_api, auth_api, projects_api
+from app.api import users_api, records_api, auth_api, projects_api
 
 app = create_app()
 

@@ -6,7 +6,7 @@ from flask import url_for, abort
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
-from app import db, create_app
+from . import db, create_app
 
 app = create_app()
 
