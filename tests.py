@@ -19,7 +19,6 @@ class TestUsers(unittest.TestCase):
     def setUp(self):
         ctx = app.app_context()
         ctx.push()
-        db.init_app(app)
         db.create_all()
         self.user = User(username="test")
         self.user_password = 'test'
@@ -65,7 +64,6 @@ class TestUserChangePassword(unittest.TestCase):
     def setUp(self):
         ctx = app.app_context()
         ctx.push()
-        db.init_app(app)
         db.create_all()
         self.user = User(username="test")
         self.user_password = 'test'
@@ -110,7 +108,6 @@ class TestRecords(unittest.TestCase):
     def setUp(self):
         ctx = app.app_context()
         ctx.push()
-        db.init_app(app)
         db.create_all()
         self.user = User(username="test")
         self.user.set_password('test')
@@ -166,7 +163,6 @@ class TestProjects(unittest.TestCase):
     def setUp(self):
         ctx = app.app_context()
         ctx.push()
-        db.init_app(app)
         db.create_all()
         self.user = User(username="test")
         self.user.set_password('test')

@@ -4,6 +4,7 @@ import os
 class Base(object):
     SECRET_KEY = 'top secret'
     SQLALCHEMY_TRACK_MODIFICATIONS = True
+    DEBUG = True
 
 
 class DevelopmentConfig(Base):
