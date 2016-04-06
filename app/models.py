@@ -17,7 +17,6 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     company_id = db.Column(db.Integer, db.ForeignKey('companies.id'))
     username = db.Column(db.String(64))
-    records = db.relationship('Record', backref='user', lazy='dynamic')
     password_hash = db.Column(db.String(128))
     timestamp = db.Column(db.DateTime, default=datetime.datetime.now)
 
@@ -76,6 +75,7 @@ class Record(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user = relationship('User', backref='record_set')
     project_id = db.Column(db.Integer, db.ForeignKey('projects.id'))
     project = relationship('Project', backref='record_set')
     date = db.Column(db.Date)
@@ -85,10 +85,10 @@ class Record(db.Model):
     timestamp = db.Column(db.DateTime, default=datetime.datetime.now)
 
     def import_data(self, data):
-        self.description = data['description']
         self.time_spent = data['time_spent']
         self.ticket = data['ticket']
         self.date = dateutil.parser.parse(data['date'])
+        self.description = data['description']
         return self
 
     def export_data(self):
