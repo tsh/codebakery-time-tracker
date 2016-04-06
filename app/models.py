@@ -4,6 +4,7 @@ import dateutil.parser
 
 from flask import url_for, abort, current_app
 from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy.orm import relationship
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
 from . import db, create_app
@@ -76,6 +77,7 @@ class Record(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     project_id = db.Column(db.Integer, db.ForeignKey('projects.id'))
+    project = relationship('Project', backref='record_set')
     date = db.Column(db.Date)
     ticket = db.Column(db.Integer)
     time_spent = db.Column(db.Numeric(precision=3))

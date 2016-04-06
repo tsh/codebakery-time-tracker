@@ -72,15 +72,16 @@ def user_change_password(id):
 
 
 @records_api.route('/', methods=['GET'])
-def reports():
+def records():
     return jsonify({'records': [record.get_url() for record in Record.query.all()]})
 
 
 @records_api.route('/', methods=['POST'])
 @auth.login_required
-def create_report():
+def create_record():
     user = g.user
-    record = Record(user=user)
+    project = Project.query.get_or_404(request.json['project_id'])
+    record = Record(user=user, project=project)
     record.import_data(request.json)
     db.session.add(record)
     db.session.commit()

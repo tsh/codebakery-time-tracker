@@ -127,10 +127,14 @@ class TestRecords(unittest.TestCase):
         self.assertIn(record.get_url(), str(resp.data))
 
     def test_create_record(self):
+        project = Project(name='test_project')
+        db.session.add(project)
+        db.session.commit()
         record_data = {'description': 'test description',
                        'time_spent': 4,
                        'ticket': 22,
-                       'date': '2016-03-18'
+                       'date': '2016-03-18',
+                       'project_id': project.id
                        }
         resp = self.client.post('api/records/', data=json.dumps(record_data),
                                 headers={'Content-Type': 'application/json',
@@ -142,6 +146,7 @@ class TestRecords(unittest.TestCase):
         self.assertEqual(record.ticket, record_data['ticket'])
         self.assertEqual(record.date, datetime.date(2016, 3, 18))
         self.assertEqual(record.user.id, self.user.id)
+        self.assertEqual(record.project, project)
 
     def test_record_detail(self):
         record = Record(time_spent=8.5)
