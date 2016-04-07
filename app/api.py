@@ -1,4 +1,7 @@
-from flask import jsonify, Blueprint, url_for, request, g, current_app
+import csv
+import io
+
+from flask import jsonify, Blueprint, url_for, request, g, current_app, make_response
 from flask.ext.httpauth import HTTPBasicAuth
 import itsdangerous
 
@@ -62,6 +65,19 @@ def user_change_password(id):
     user.change_password(old_password=request.json['password'],
                          new_password=request.json['new_password'])
     return jsonify({}), 205
+
+
+@api_v1.route('users/<int:id>/work-report.csv/', methods=['GET'])
+def get_user_work(id):
+    user = User.query.get_or_404(id)
+    si = io.StringIO()
+    cw = csv.writer(si)
+    for r in Record.query.filter_by(user_id=user.id):
+        cw.writerow([r.date, r.user.username, r.time_spent, r.description])
+    output = make_response(si.getvalue())
+    # output.headers["Content-Disposition"] = "attachment; filename=export.csv"
+    output.headers["Content-type"] = "text/csv"
+    return output
 
 
 # RECORDS

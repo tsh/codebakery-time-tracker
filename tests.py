@@ -60,6 +60,28 @@ class TestUsers(unittest.TestCase):
             db.drop_all()
 
 
+class TestUserReports(unittest.TestCase):
+    def setUp(self):
+        ctx = app.app_context()
+        ctx.push()
+        db.create_all()
+        self.user = User(username="test")
+        self.user_password = 'test'
+        self.user.set_password(self.user_password)
+        db.session.add(self.user)
+        self.record = Record(user=self.user, time_spent=2, description='descr')
+        db.session.add(self.record)
+        db.session.commit()
+        self.client = app.test_client()
+
+    def test_get_csv_report(self):
+        resp = self.client.get('api/v1/users/{}/work-report.csv/'.format(self.user.id))
+        self.assertEqual(resp.status_code, 200, msg=resp.data)
+        self.assertIn(',{}'.format(self.record.description), str(resp.data))
+        self.assertIn(',{},'.format(self.record.user.username), str(resp.data))
+
+
+
 class TestUserChangePassword(unittest.TestCase):
     def setUp(self):
         ctx = app.app_context()
