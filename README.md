@@ -1,4 +1,4 @@
-Extremely simple by design, app for tracking spend time.
+Extremely simple by design, app for tracking spent time.
 
 To run, do:
 ```
