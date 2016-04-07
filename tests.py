@@ -6,7 +6,7 @@ from flask import url_for, json
 
 from app import create_app, db
 from app.models import User, Record, Project
-from app.api import users_api, records_api, auth_api, projects_api
+from app.api import api_v1
 from config import TestConfig
 
 
@@ -31,26 +31,26 @@ class TestUsers(unittest.TestCase):
         user = User(username="username")
         db.session.add(user)
         db.session.commit()
-        resp = self.client.get('api/users/')
+        resp = self.client.get('api/v1/users/')
         self.assertEqual(resp.status_code, 200)
-        self.assertIn(url_for('users_api.get_user', id=self.user.id), str(resp.data))
+        self.assertIn(url_for('api_v1.get_user', id=self.user.id), str(resp.data))
 
     def test_post_users(self):
         user_data = {
             'username': 'new_user'
         }
-        resp = self.client.post('api/users/', data=json.dumps(user_data),
+        resp = self.client.post('api/v1/users/', data=json.dumps(user_data),
                                 headers={'Content-Type': 'application/json'})
         self.assertEqual(resp.status_code, 201)
         self.assertEqual(1, len(db.session.query(User).filter(User.username == user_data['username']).all()))
 
     def test_user_detail(self):
-        resp = self.client.get('/api/users/{}'.format(self.user.id))
+        resp = self.client.get('/api/v1/users/{}'.format(self.user.id))
         self.assertEqual(resp.status_code, 200, msg=resp.data)
         self.assertIn(self.user.username, str(resp.data))
 
     def test_get_token(self):
-        resp = self.client.get('api/auth/', headers={'Authorization': b'Basic ' + base64.b64encode(b'test:test')})
+        resp = self.client.get('api/v1/auth/', headers={'Authorization': b'Basic ' + base64.b64encode(b'test:test')})
         self.assertEqual(resp.status_code, 200)
         self.assertIn('token', str(resp.data))
 
@@ -75,7 +75,7 @@ class TestUserChangePassword(unittest.TestCase):
     def test_change_password(self):
         new_password = 'new_password'
         self.assertFalse(self.user.verify_password(new_password))
-        resp = self.client.post('api/users/{}/change-password/'.format(self.user.id),
+        resp = self.client.post('api/v1/users/{}/change-password/'.format(self.user.id),
                                 data=json.dumps({'password': self.user_password,
                                                  'new_password': new_password}),
                                 headers={'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ class TestUserChangePassword(unittest.TestCase):
         other_user.set_password(other_user_password)
         db.session.add(other_user)
         db.session.commit()
-        resp = self.client.post('api/users/{}/change-password/'.format(self.user.id),
+        resp = self.client.post('api/v1/users/{}/change-password/'.format(self.user.id),
                                 data=json.dumps({'password': other_user_password,
                                                  'new_password': 'some_password'}),
                                 headers={'Content-Type': 'application/json',
@@ -119,7 +119,7 @@ class TestRecords(unittest.TestCase):
         record = Record()
         db.session.add(record)
         db.session.commit()
-        resp = self.client.get('api/records/')
+        resp = self.client.get('api/v1/records/')
         self.assertEqual(resp.status_code, 200)
         self.assertIn(record.get_url(), str(resp.data))
 
@@ -133,7 +133,7 @@ class TestRecords(unittest.TestCase):
                        'date': '2016-03-18',
                        'project_id': project.id
                        }
-        resp = self.client.post('api/records/', data=json.dumps(record_data),
+        resp = self.client.post('api/v1/records/', data=json.dumps(record_data),
                                 headers={'Content-Type': 'application/json',
                                          'Authorization': b'Basic ' + base64.b64encode(b'test:test')})
         self.assertEqual(resp.status_code, 201)
@@ -149,7 +149,7 @@ class TestRecords(unittest.TestCase):
         record = Record(time_spent=8.5)
         db.session.add(record)
         db.session.commit()
-        resp = self.client.get('api/records/{}'.format(record.id))
+        resp = self.client.get('api/v1/records/{}'.format(record.id))
         self.assertEqual(resp.status_code, 200, msg=resp.data)
         self.assertIn(str(record.time_spent), str(resp.data))
 
@@ -172,7 +172,7 @@ class TestProjects(unittest.TestCase):
 
     def test_create_project(self):
         project_data = {'name': 'new project'}
-        resp = self.client.post('api/projects/', data=json.dumps(project_data),
+        resp = self.client.post('api/v1/projects/', data=json.dumps(project_data),
                                 headers={'Content-Type': 'application/json',
                                          'Authorization': b'Basic ' + base64.b64encode(b'test:test')})
         self.assertEqual(resp.status_code, 201)
@@ -183,7 +183,7 @@ class TestProjects(unittest.TestCase):
         project = Project(name='prj')
         db.session.add(project)
         db.session.commit()
-        resp = self.client.get('/api/projects/{}'.format(project.id), headers={'Content-Type': 'application/json',
+        resp = self.client.get('/api/v1/projects/{}'.format(project.id), headers={'Content-Type': 'application/json',
                                          'Authorization': b'Basic ' + base64.b64encode(b'test:test')})
         self.assertEqual(resp.status_code, 200, msg=resp.data)
         self.assertIn(project.name, str(resp.data))
@@ -195,8 +195,5 @@ class TestProjects(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    app.register_blueprint(users_api)
-    app.register_blueprint(records_api)
-    app.register_blueprint(auth_api)
-    app.register_blueprint(projects_api)
+    app.register_blueprint(api_v1)
     unittest.main()

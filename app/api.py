@@ -7,11 +7,7 @@ from .models import User, Record, Project
 
 
 auth = HTTPBasicAuth()
-
-users_api = Blueprint('users_api', 'users_api', url_prefix='/api/users/')
-records_api = Blueprint('records_api', 'records_api', url_prefix='/api/records/')
-auth_api = Blueprint('auth_api', 'auth_api', url_prefix='/api/auth/')
-projects_api = Blueprint('projects_api', 'projects_api', url_prefix='/api/projects/')
+api_v1 = Blueprint('api_v1', 'api_v1', url_prefix='/api/v1/')
 
 
 # AUTH
@@ -30,7 +26,7 @@ def verify_password(username_or_token, password=None):
     return True
 
 
-@auth_api.route('/', methods=['GET'])
+@api_v1.route('auth/', methods=['GET'])
 @auth.login_required
 def get_auth_token():
     token = g.user.generate_auth_token()
@@ -40,12 +36,12 @@ def get_auth_token():
 # USERS
 
 
-@users_api.route('/', methods=['GET'])
+@api_v1.route('users/', methods=['GET'])
 def users():
     return jsonify({'users': [user.get_url() for user in User.query.all()]})
 
 
-@users_api.route('/', methods=['POST'])
+@api_v1.route('users/', methods=['POST'])
 def create_user():
     user = User()
     user.import_data(request.json)
@@ -54,12 +50,12 @@ def create_user():
     return jsonify({}), 201, {'Location': user.get_url()}
 
 
-@users_api.route('<int:id>', methods=['GET'])
+@api_v1.route('users/<int:id>', methods=['GET'])
 def get_user(id):
     return jsonify(User.query.get_or_404(id).export_data())
 
 
-@users_api.route('<int:id>/change-password/', methods=['POST'])
+@api_v1.route('users/<int:id>/change-password/', methods=['POST'])
 @auth.login_required
 def user_change_password(id):
     user = User.query.get_or_404(id)
@@ -68,15 +64,15 @@ def user_change_password(id):
     return jsonify({}), 205
 
 
-# REPORTS
+# RECORDS
 
 
-@records_api.route('/', methods=['GET'])
+@api_v1.route('records/', methods=['GET'])
 def records():
     return jsonify({'records': [record.get_url() for record in Record.query.all()]})
 
 
-@records_api.route('/', methods=['POST'])
+@api_v1.route('records/', methods=['POST'])
 @auth.login_required
 def create_record():
     user = g.user
@@ -88,7 +84,7 @@ def create_record():
     return jsonify({}), 201, {'Location': record.get_url()}
 
 
-@records_api.route('<int:id>', methods=['GET'])
+@api_v1.route('records/<int:id>', methods=['GET'])
 def record_detail(id):
     return jsonify(Record.query.get_or_404(id).export_data())
 
@@ -96,7 +92,7 @@ def record_detail(id):
 # PROJECTS
 
 
-@projects_api.route('/', methods=['POST'])
+@api_v1.route('projects/', methods=['POST'])
 @auth.login_required
 def create_project():
     project = Project()
@@ -106,7 +102,7 @@ def create_project():
     return jsonify({}), 201, {'Location': project.get_url()}
 
 
-@projects_api.route('<int:id>', methods=['GET'])
+@api_v1.route('projects/<int:id>', methods=['GET'])
 @auth.login_required
 def project_detail(id):
     return jsonify(Project.query.get_or_404(id).export_data())
