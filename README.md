@@ -1,3 +1,7 @@
+[![Build Status](https://travis-ci.org/tsh/codebakery-time-tracker.svg?branch=master)](https://travis-ci.org/tsh/codebakery-time-tracker)   
+
+
+
 Extremely simple by design, app for tracking spent time.
 
 To run, do:
