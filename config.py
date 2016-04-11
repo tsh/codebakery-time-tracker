@@ -8,7 +8,7 @@ class Base(object):
 
 
 class DevelopmentConfig(Base):
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'postgresql:///time-tracker'
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'postgresql:///time_tracker'
     SESSION_TYPE = 'filesystem'
 
 

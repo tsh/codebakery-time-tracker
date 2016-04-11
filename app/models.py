@@ -86,7 +86,7 @@ class Record(db.Model):
 
     def import_data(self, data):
         self.time_spent = data['time_spent']
-        self.ticket = data['ticket']
+        self.ticket = data.get('ticket')
         self.date = dateutil.parser.parse(data['date'])
         self.description = data['description']
         return self

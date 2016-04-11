@@ -92,7 +92,10 @@ def records():
 @auth.login_required
 def create_record():
     user = g.user
-    project = Project.query.get_or_404(request.json['project_id'])
+    if 'project_id' in request.json:
+        project = Project.query.get_or_404(request.json['project_id'])
+    else:
+        project = None
     record = Record(user=user, project=project)
     record.import_data(request.json)
     db.session.add(record)
