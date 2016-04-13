@@ -1,7 +1,9 @@
 # Cli Time Tracker
 
 Allows to submit spent time through command line
-
+####Configuration:
+Modify `url.txt` in order to change endpoint where time will be submitted.
+####Usage:
 Use `-h` flag for help
 params:
 &nbsp;&nbsp;-d string description to send  
