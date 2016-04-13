@@ -36,16 +36,21 @@ func main() {
 	flag.Parse()
 
 	if (user == ""){
-		fmt.Printf("User undefined\n")
+		fmt.Fprintf(os.Stderr, "%s\n", "User undefined")
 		flag.PrintDefaults()
+		os.Exit(1)
 	}
 
 	if (password == ""){
-		fmt.Printf("Password undefined\n")
+		fmt.Fprintf(os.Stderr, "%s\n", "Password undefined")
+		flag.PrintDefaults()
+		os.Exit(1)
 	}
 
 	if (timeSpent == -1){
-		fmt.Printf("Time spent not specified")
+		fmt.Fprintf(os.Stderr, "%s\n", "Time spent not specified")
+		flag.PrintDefaults()
+		os.Exit(1)
 	}
 
 	fmt.Printf("DEBUG: other args: %+v\n", flag.Args())
