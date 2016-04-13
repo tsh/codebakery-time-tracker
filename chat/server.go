@@ -25,7 +25,7 @@ func echoHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	connections[conn] = true
-	fmt.Print(connections)
+	fmt.Println(connections)
 
 	for {
 		messageType, message, err := conn.ReadMessage()
@@ -38,10 +38,13 @@ func echoHandler(w http.ResponseWriter, r *http.Request) {
 		response := map[string]string {"username": "username", "message": string(message)}
 		jsonResponse, _ := json.Marshal(response)
 
-		err = conn.WriteMessage(messageType, jsonResponse);
-		if err != nil {
-			return
+		for k, _ := range connections {
+			err = k.WriteMessage(messageType, jsonResponse);
+			if err != nil {
+				fmt.Printf("ERROR at: %s\n", k)
+			}
 		}
+
 	}
 }
 
