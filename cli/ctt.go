@@ -12,8 +12,8 @@ import (
 
 
 type Message struct {
-	TimeSpent 	int
-	Description string
+	TimeSpent 	int		`json:"time_spent"`
+	Description string	`json:"description"`
 }
 
 
