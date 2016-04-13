@@ -8,6 +8,7 @@ import (
 	"bytes"
 //	"io/ioutil"
 	"encoding/json"
+	"io/ioutil"
 )
 
 
@@ -53,15 +54,14 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Printf("DEBUG: other args: %+v\n", flag.Args())
+	data, err := ioutil.ReadFile("url.txt")
+	url := string(data[:])
 
-	url := "http://0.0.0.0:8000/api/v1/records/"
+//	url := "http://0.0.0.0:8000/api/v1/records/"
 
 
-	m := Message{TimeSpent: 2, Description: "description"}
+	m := Message{TimeSpent: timeSpent, Description: description}
 	jm, _ := json.Marshal(m)
-	js := string(jm)
-	fmt.Println(js)
 
     req, err := http.NewRequest("POST", url, bytes.NewBuffer(jm))
     req.Header.Set("Content-Type", "application/json")
@@ -70,11 +70,12 @@ func main() {
     client := &http.Client{}
     resp, err := client.Do(req)
     if err != nil {
+		fmt.Fprintf(os.Stderr, "\nERROR:  Can't connect to server at: %s\n\n", url)
         panic(err)
     }
     defer resp.Body.Close()
 
-    if resp.Status == 201 {
+    if resp.StatusCode == 201 {
 		fmt.Println("Ok")
 	} else {
 		fmt.Printf("Smth went wrong! Server returned %s\n", resp.Status)
