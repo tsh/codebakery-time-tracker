@@ -7,6 +7,6 @@ flask-marshmallow
 Flask
 Flask-HTTPAuth
 Flask-SQLAlchemy
-Flask-Testing
+flask-restful
 marshmallow
 marshmallow-sqlalchemy

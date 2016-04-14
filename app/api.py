@@ -3,6 +3,8 @@ import io
 
 from flask import jsonify, Blueprint, url_for, request, g, current_app, make_response
 from flask.ext.httpauth import HTTPBasicAuth
+from flask_restful import Resource, Api
+from flask_restful_swagger import swagger
 import itsdangerous
 
 from app import db
@@ -11,6 +13,8 @@ from .models import User, Record, Project
 
 auth = HTTPBasicAuth()
 api_v1 = Blueprint('api_v1', 'api_v1', url_prefix='/api/v1/')
+api = swagger.docs(Api(api_v1), apiVersion='1.0')
+
 
 
 # AUTH
@@ -38,10 +42,12 @@ def get_auth_token():
 
 # USERS
 
+class Users(Resource):
+    def get(self):
+        return jsonify({'users': [user.get_url() for user in User.query.all()]})
 
-@api_v1.route('users/', methods=['GET'])
-def users():
-    return jsonify({'users': [user.get_url() for user in User.query.all()]})
+api.add_resource(Users, 'users/')
+
 
 
 @api_v1.route('users/', methods=['POST'])
