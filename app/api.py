@@ -4,7 +4,6 @@ import io
 from flask import jsonify, Blueprint, url_for, request, g, current_app, make_response
 from flask.ext.httpauth import HTTPBasicAuth
 from flask_restful import Resource, Api
-from flask_restful_swagger import swagger
 import itsdangerous
 
 from app import db
