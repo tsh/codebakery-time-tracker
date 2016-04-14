@@ -12,7 +12,7 @@ from .models import User, Record, Project
 
 auth = HTTPBasicAuth()
 api_v1 = Blueprint('api_v1', 'api_v1', url_prefix='/api/v1/')
-api = swagger.docs(Api(api_v1), apiVersion='1.0')
+api = Api(api_v1)
 
 
 
