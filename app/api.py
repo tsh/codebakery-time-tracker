@@ -1,12 +1,13 @@
 import csv
 import io
 
-from flask import jsonify, Blueprint, url_for, request, g, current_app, make_response
+from flask import jsonify, Blueprint, url_for, request, g, redirect, make_response, render_template, flash, session
 from flask.ext.httpauth import HTTPBasicAuth
 from flask_restful import Resource, Api
 import itsdangerous
 
 from app import db, app
+from app.forms import LoginForm
 from .models import User, Record, Project
 
 
@@ -16,9 +17,26 @@ api = Api(api_v1)
 
 
 @app.route('/', methods=['GET'])
-def test():
-    return 'TEST'
+def main():
+    user = User.query.filter_by(username=session.get('username')).first()
+    return render_template('main.html', user=user)
 
+
+@app.route('/login', methods=['GET'])
+def login():
+    form = LoginForm()
+    return render_template('login.html', form=form)
+
+@app.route('/login', methods=['POST'])
+def login_post():
+    form = LoginForm(request.form)
+    if form.validate() and verify_password(form.username.data, form.password.data):
+        session['username'] = form.username.data
+        flash('You were successfully logged in')
+        return redirect(url_for('main'))
+    else:
+        flash("Something went wrong, can't login")
+        return render_template('login.html', form=form)
 
 # AUTH
 
