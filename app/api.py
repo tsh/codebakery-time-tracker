@@ -6,7 +6,7 @@ from flask.ext.httpauth import HTTPBasicAuth
 from flask_restful import Resource, Api
 import itsdangerous
 
-from app import db
+from app import db, app
 from .models import User, Record, Project
 
 
@@ -14,6 +14,10 @@ auth = HTTPBasicAuth()
 api_v1 = Blueprint('api_v1', 'api_v1', url_prefix='/api/v1/')
 api = Api(api_v1)
 
+
+@app.route('/', methods=['GET'])
+def test():
+    return 'TEST'
 
 
 # AUTH

@@ -10,3 +10,4 @@ Flask-SQLAlchemy
 flask-restful
 marshmallow
 marshmallow-sqlalchemy
+WTForms

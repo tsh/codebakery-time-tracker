@@ -20,10 +20,6 @@ dev_config = DevelopmentConfig()
 app = create_app(dev_config)
 
 
-@app.route('/')
-def hello():
-    return 'hello'
-
 app.register_blueprint(api_v1)
 
 if __name__ == '__main__':
