@@ -22,10 +22,18 @@ def main():
     return render_template('main.html', user=user)
 
 
+@app.route('/submit', methods=['POST'])
+def submit_time():
+    user = User.query.filter_by(username=session.get('username')).first()
+    if not user:
+        return redirect(url_for('login'))
+
+
 @app.route('/login', methods=['GET'])
 def login():
     form = LoginForm()
     return render_template('login.html', form=form)
+
 
 @app.route('/login', methods=['POST'])
 def login_post():
@@ -37,6 +45,7 @@ def login_post():
     else:
         flash("Something went wrong, can't login")
         return render_template('login.html', form=form)
+
 
 # AUTH
 

@@ -1,4 +1,4 @@
-from wtforms import Form, BooleanField, StringField, validators
+from wtforms import Form, BooleanField, StringField, IntegerField, validators
 
 
 class RegistrationForm(Form):
@@ -10,4 +10,11 @@ class RegistrationForm(Form):
 class LoginForm(Form):
     username = StringField('Username', [validators.Length(min=3, max=25)])
     password = StringField('Password', [validators.Length(min=3, max=25)])
+
+
+class SubmitTimeForm(Form):
+    time_spent = IntegerField('Time Spent')
+    ticket
+    date
+    description
 
