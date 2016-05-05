@@ -1,0 +1,66 @@
+header {
+  background: #007788;
+  color: #ffffff;
+  padding: 20px;
+  text-align: center;
+  text-shadow: 1px 1px 0 #000;
+
+}
+
+h2 {
+  text-align: center;
+}
+
+.wrapper {
+  padding-top: 15px;
+}
+
+.form-holder {
+  border: 1px solid #ccc;
+}
+
+
+//calendar
+.calendar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  border: 1px solid #cccccc;
+
+  .calendar-col {
+    display: flex;
+    flex-direction: column;
+
+    .cell {
+      border-radius: 50%;
+      margin: 5px;
+      height: 35px;
+      width: 35px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      &.today {
+        background: #285088;
+        color: #fff;
+      }
+
+      &.activity {
+        background: #44A340;
+      }
+
+      &.no-activity {
+        background: #EE1327;
+        color: #fff;
+      }
+
+      &:empty {
+        background: none;
+      }
+
+      &:last-child {
+        color: #cecece;
+      }
+    }
+  }
+}
