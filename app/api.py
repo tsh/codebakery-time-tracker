@@ -7,7 +7,7 @@ from flask_restful import Resource, Api
 import itsdangerous
 
 from app import db, app
-from app.forms import LoginForm
+from app.forms import LoginForm, SubmitTimeForm
 from .models import User, Record, Project
 
 
@@ -19,7 +19,8 @@ api = Api(api_v1)
 @app.route('/', methods=['GET'])
 def main():
     user = User.query.filter_by(username=session.get('username')).first()
-    return render_template('main.html', user=user)
+    form = SubmitTimeForm()
+    return render_template('main.html', user=user, form=form)
 
 
 @app.route('/submit', methods=['POST'])

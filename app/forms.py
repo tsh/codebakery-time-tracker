@@ -1,4 +1,4 @@
-from wtforms import Form, BooleanField, StringField, IntegerField, validators
+from wtforms import Form, BooleanField, StringField, IntegerField, DateField, TextAreaField, validators
 
 
 class RegistrationForm(Form):
@@ -14,7 +14,7 @@ class LoginForm(Form):
 
 class SubmitTimeForm(Form):
     time_spent = IntegerField('Time Spent')
-    # ticket
-    # date
-    # description
+    ticket = IntegerField('Ticket')
+    date = DateField('Date/Time', render_kw={'type': 'date'})
+    description = TextAreaField('Description')
 

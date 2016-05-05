@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% import 'macros.html' as macros %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -26,6 +27,15 @@
 
 {% if user %}
   <div>Welcome, {{user.username}}</div>
+
+<form method="POST" action="/">
+    {{macros.form_field(form.ticket)}}
+    {{macros.form_field(form.time_spent)}}
+    {{macros.form_field(form.date)}}
+    {{macros.form_field(form.description)}}
+    <input type="submit" value="Submit">
+</form>
+
 {% else %}
 <p>Welcome to tt app.</p>
 <a href="/login">login</a>
