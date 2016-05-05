@@ -23,6 +23,24 @@ def main():
     return render_template('main.html', user=user, form=form)
 
 
+@app.route('/', methods=['POST'])
+def post_time():
+    user = User.query.filter_by(username=session.get('username')).first()
+    if not user:
+        return redirect(url_for('login'))
+    form = SubmitTimeForm(request.form)
+    if form.validate():
+        record = Record().import_data(form.data)
+        record.user = user
+        db.session.add(record)
+        db.session.commit()
+        flash('Record added')
+        return redirect(url_for('main'))
+    else:
+        return render_template('main.html', user=user, form=form)
+
+
+
 @app.route('/submit', methods=['POST'])
 def submit_time():
     user = User.query.filter_by(username=session.get('username')).first()

@@ -14,7 +14,7 @@ class LoginForm(Form):
 
 class SubmitTimeForm(Form):
     time_spent = IntegerField('Time Spent')
-    ticket = IntegerField('Ticket')
+    ticket = IntegerField('Ticket', [validators.Optional()])
     date = DateField('Date/Time', render_kw={'type': 'date'})
     description = TextAreaField('Description')
 

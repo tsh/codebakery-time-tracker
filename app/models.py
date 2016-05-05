@@ -87,7 +87,10 @@ class Record(db.Model):
     def import_data(self, data):
         self.time_spent = data['time_spent']
         self.ticket = data.get('ticket')
-        self.date = dateutil.parser.parse(data['date']) if 'date' in data else None
+        if isinstance(data.get('date'), datetime.date):
+            self.date = data['date']
+        else:
+            self.date = dateutil.parser.parse(data['date']) if 'date' in data else None
         self.description = data['description']
         return self
 
