@@ -2,6 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script>
+        $(function() {
+          $( "#window" ).draggable({ handle: "p" });
+//          $( "div, p" ).disableSelection();
+        });
+    </script>
     <title>Main</title>
 </head>
 <body>
@@ -21,5 +30,12 @@
 <p>Welcome to tt app.</p>
 <a href="/login">login</a>
 {% endif %}
+
+<div id="window" class="ui-widget-content">
+    <p class="header">Window title <span> _ </span><span> X </span></p>
+    <div><span>13.42</span> Response from server goes here </div>
+    <div>Message: <input type="text"></div>
+</div>
+
 </body>
 </html>

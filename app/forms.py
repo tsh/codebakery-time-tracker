@@ -14,7 +14,7 @@ class LoginForm(Form):
 
 class SubmitTimeForm(Form):
     time_spent = IntegerField('Time Spent')
-    ticket
-    date
-    description
+    # ticket
+    # date
+    # description
 
