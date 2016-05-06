@@ -1,9 +1,19 @@
+body,html {
+  height: 100%;
+
+}
 header {
   background: #007788;
   color: #ffffff;
   padding: 20px;
+  height: 92px;
   text-align: center;
   text-shadow: 1px 1px 0 #000;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 2;
 
 }
 
@@ -11,12 +21,28 @@ h2 {
   text-align: center;
 }
 
+h3 {
+  text-align: center;
+}
+
 .wrapper {
-  padding-top: 15px;
+  padding-top: 107px;
+  flex-direction:column;
+  min-height: 100%;
+  position: relative;
+  z-index: 1;
+  display: flex;
+
+}
+.hor-holder {
+  flex: 1;
+  height: 50%;
 }
 
 .form-holder {
   border: 1px solid #ccc;
+  overflow: auto;
+  max-height: 335px;
 }
 
 
@@ -39,6 +65,12 @@ h2 {
       display: flex;
       justify-content: center;
       align-items: center;
+      position: relative;
+
+
+      span {
+        display: none;
+      }
 
       &.today {
         background: #285088;
@@ -46,7 +78,18 @@ h2 {
       }
 
       &.activity {
-        background: #44A340;
+        &:before {
+          content:'';
+          position: absolute;
+          bottom: 0;
+          left: 50%;
+          width: 6px;
+          height: 6px;
+          margin: 0 0 0 -3px;
+          display: block;
+          border-radius: 50%;
+          background: #199743;
+        }
       }
 
       &.no-activity {
@@ -54,11 +97,11 @@ h2 {
         color: #fff;
       }
 
-      &:empty {
+      &:empty:before {
         background: none;
       }
 
-      &:last-child {
+      &.weekends {
         color: #cecece;
       }
     }
