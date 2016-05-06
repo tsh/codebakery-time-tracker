@@ -6,14 +6,13 @@ from flask.ext.httpauth import HTTPBasicAuth
 from flask_restful import Resource, Api
 import itsdangerous
 
-from app import db, app
+from app import db, app, api, api_v1
 from app.forms import LoginForm, SubmitTimeForm
 from .models import User, Record, Project
 
 
 auth = HTTPBasicAuth()
-api_v1 = Blueprint('api_v1', 'api_v1', url_prefix='/api/v1/')
-api = Api(api_v1)
+
 
 
 @app.route('/', methods=['GET'])
@@ -95,22 +94,21 @@ class Users(Resource):
     def get(self):
         return jsonify({'users': [user.get_url() for user in User.query.all()]})
 
+    def post(self):
+        user = User()
+        user.import_data(request.json)
+        db.session.add(user)
+        db.session.commit()
+        return {}, 201, {'Location': user.get_url()}
+
 api.add_resource(Users, 'users/')
 
 
+class UserDetails(Resource):
+    def get(self, id):
+        return jsonify(User.query.get_or_404(id).export_data())
 
-@api_v1.route('users/', methods=['POST'])
-def create_user():
-    user = User()
-    user.import_data(request.json)
-    db.session.add(user)
-    db.session.commit()
-    return jsonify({}), 201, {'Location': user.get_url()}
-
-
-@api_v1.route('users/<int:id>', methods=['GET'])
-def get_user(id):
-    return jsonify(User.query.get_or_404(id).export_data())
+api.add_resource(UserDetails, 'users/<int:id>', endpoint="user_detail")
 
 
 @api_v1.route('users/<int:id>/change-password/', methods=['POST'])
@@ -122,25 +120,28 @@ def user_change_password(id):
     return jsonify({}), 205
 
 
-@api_v1.route('users/<int:id>/work-report.csv/', methods=['GET'])
-def get_user_work(id):
-    user = User.query.get_or_404(id)
-    si = io.StringIO()
-    cw = csv.writer(si)
-    for r in Record.query.filter_by(user_id=user.id):
-        cw.writerow([r.date, r.user.username, r.time_spent, r.description])
-    output = make_response(si.getvalue())
-    # output.headers["Content-Disposition"] = "attachment; filename=export.csv"
-    output.headers["Content-type"] = "text/csv"
-    return output
+class UserWork(Resource):
+    def get(self, id):
+        user = User.query.get_or_404(id)
+        si = io.StringIO()
+        cw = csv.writer(si)
+        for r in Record.query.filter_by(user_id=user.id):
+            cw.writerow([r.date, r.user.username, r.time_spent, r.description])
+        output = make_response(si.getvalue())
+        # output.headers["Content-Disposition"] = "attachment; filename=export.csv"
+        output.headers["Content-type"] = "text/csv"
+        return output
+
+api.add_resource(UserWork, 'users/<int:id>/work-report.csv/')
 
 
 # RECORDS
 
+class Records(Resource):
+    def get(self):
+        return jsonify({'records': [record.get_url() for record in Record.query.all()]})
 
-@api_v1.route('records/', methods=['GET'])
-def records():
-    return jsonify({'records': [record.get_url() for record in Record.query.all()]})
+api.add_resource(Records, 'records/')
 
 
 @api_v1.route('records/', methods=['POST'])

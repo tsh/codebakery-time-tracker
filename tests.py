@@ -4,9 +4,9 @@ import unittest
 
 from flask import url_for, json
 
-from app import create_app, db
+from app import create_app, db, api_v1
 from app.models import User, Record, Project
-from app.api import api_v1
+from app.api import app
 from config import TestConfig
 
 
@@ -33,7 +33,7 @@ class TestUsers(unittest.TestCase):
         db.session.commit()
         resp = self.client.get('api/v1/users/')
         self.assertEqual(resp.status_code, 200)
-        self.assertIn(url_for('api_v1.get_user', id=self.user.id), str(resp.data))
+        self.assertIn(self.user.get_url(), str(resp.data))
 
     def test_post_users(self):
         user_data = {
