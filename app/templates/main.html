@@ -42,10 +42,40 @@
 {% endif %}
 
 <div id="window" class="ui-widget-content">
-    <p class="header">Window title <span> _ </span><span> X </span></p>
-    <div><span>13.42</span> Response from server goes here </div>
-    <div>Message: <input type="text"></div>
+    <p class="header">Chat<span> _ </span><span> X </span></p>
+    <div id="chat-log"></div>
+    <div>Message: <input type="text" id="chat-input"></div>
 </div>
+<script>
+        var $chatLog = $("#chat-log");
+
+        $("#chat-input").on("keypress", function(e){
+            if (e.keyCode === 13) {
+                var msg = $(this).val();
+                sendMessage(msg);
+            }
+        });
+
+        // Create a new instance of the websocket
+        webSocket = new WebSocket("ws://localhost:8080/echo");
+
+        webSocket.onopen = function(event){
+            console.log(event);
+        };
+
+        webSocket.onmessage = function(event){
+            var msg = JSON.parse(event.data)
+            $chatLog.append("<p>" + msg.username +": " + msg.message + "</p>");
+        };
+    
+        webSocket.onclose = function(event){
+            console.log("Connection closed");
+        };
+
+        function sendMessage(msg){
+            webSocket.send(msg);
+        }
+</script>
 
 </body>
 </html>
