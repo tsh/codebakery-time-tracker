@@ -13,6 +13,6 @@ api = Api(api_v1)
 
 def create_app(config_object):
     app.config.from_object(config_object)
-    db.init_app(app)
     app.register_blueprint(api_v1)
+    db.init_app(app)
     return app
