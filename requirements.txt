@@ -1,7 +1,7 @@
 pip
 setuptools
 
-Flask==0.10.1
+git+https://github.com/pallets/flask.git@88500f5cc709e2e931e6547ed9b58033a50215a8#egg=flask
 Flask-HTTPAuth==3.1.2
 flask-marshmallow==0.6.2
 Flask-RESTful==0.3.5

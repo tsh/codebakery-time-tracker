@@ -2,7 +2,7 @@ import csv
 import io
 
 from flask import jsonify, Blueprint, url_for, request, g, redirect, make_response, render_template, flash, session
-from flask.ext.httpauth import HTTPBasicAuth
+from flask_httpauth import HTTPBasicAuth
 from flask_restful import Resource, Api
 import itsdangerous
 
