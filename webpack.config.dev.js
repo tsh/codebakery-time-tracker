@@ -1,36 +1,16 @@
-const path = require('path');
 const webpack = require('webpack');
+const webpackConfigCommon = require('./webpack.config.common.js');
 
-module.exports = {
+module.exports = Object.assign({}, webpackConfigCommon, {
   devtool: 'eval',
   entry: [
     'react-hot-loader/patch',
     'webpack-dev-server/client?http://localhost:3000',
     'webpack/hot/only-dev-server',
-    './src/index',
+    './js/index',
+    './scss/entry.scss',
   ],
-  output: {
-    path: path.join(__dirname, 'dist'),
-    filename: 'bundle.js',
-    publicPath: '/static/',
-  },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
   ],
-  module: {
-    loaders: [
-      {
-        test: /\.js$/,
-        loaders: ['babel'],
-        include: path.join(__dirname, 'src'),
-      },
-      {
-        test: /\.scss$/,
-        loaders: ['style', 'css', 'sass'],
-      },
-    ],
-  },
-  sassLoader: {
-    includePaths: [path.resolve(__dirname, 'node_modules/bootstrap/scss')],
-  },
-};
+});
