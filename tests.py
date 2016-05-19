@@ -217,5 +217,4 @@ class TestProjects(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    app.register_blueprint(api_v1)
     unittest.main()
