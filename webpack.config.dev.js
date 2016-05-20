@@ -8,7 +8,7 @@ module.exports = Object.assign({}, webpackConfigCommon, {
     'webpack-dev-server/client?http://localhost:3000',
     'webpack/hot/only-dev-server',
     './js/index',
-    './scss/entry.scss',
+    './scss/index.scss',
   ],
   plugins: [
     new webpack.HotModuleReplacementPlugin(),

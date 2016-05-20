@@ -5,7 +5,7 @@ module.exports = Object.assign({}, webpackConfigCommon, {
   devtool: 'source-map',
   entry: [
     './js/index',
-    './scss/entry.scss',
+    './scss/index.scss',
   ],
   plugins: [
     new webpack.optimize.OccurrenceOrderPlugin(),

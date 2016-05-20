@@ -1,7 +1,9 @@
 #!/usr/bin/env python
-import click
 import glob
+import os
 import shutil
+import subprocess
+import click
 from flask.cli import FlaskGroup
 from backend import app, db
 from backend.models import User
@@ -26,6 +28,30 @@ def clean():
 def create_db():
     """Create database"""
     db.create_all()
+
+
+@cli.command()
+def lint(with_appcontext=False):
+    """Lint source code"""
+    click.echo('Running flake8...\n')
+    subprocess.call(['flake8', './backend'])
+    click.echo('\nRunning ESLint...')
+    subprocess.call(['./node_modules/.bin/eslint', 'js'])
+
+
+@cli.command()
+def build(with_appcontext=False):
+    subprocess.call(
+        ['./node_modules/.bin/webpack', '--config', 'webpack.config.prod.js'],
+        env=dict(os.environ, NODE_ENV='production')
+    )
+
+
+@cli.command()
+def frontend(with_appcontext=False):
+    subprocess.call(
+        ['node', 'server.js'],
+    )
 
 
 @cli.command()
