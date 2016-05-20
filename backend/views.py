@@ -1,18 +1,17 @@
 import csv
 import io
 
-from flask import jsonify, Blueprint, url_for, request, g, redirect, make_response, render_template, flash, session
-from flask_httpauth import HTTPBasicAuth
-from flask_restful import Resource, Api
 import itsdangerous
+from flask import jsonify, url_for, request, g, redirect, make_response, render_template, flash, session
+from flask_httpauth import HTTPBasicAuth
+from flask_restful import Resource
 
-from app import db, app, api, api_v1
-from app.forms import LoginForm, SubmitTimeForm
+from . import db, app, api
+from .forms import LoginForm, SubmitTimeForm
 from .models import User, Record, Project
 
 
 auth = HTTPBasicAuth()
-
 
 
 @app.route('/', methods=['GET'])
@@ -37,7 +36,6 @@ def post_time():
         return redirect(url_for('main'))
     else:
         return render_template('main.html', user=user, form=form)
-
 
 
 @app.route('/submit', methods=['POST'])
@@ -81,7 +79,7 @@ def verify_password(username_or_token, password=None):
     return True
 
 
-@api_v1.route('auth/', methods=['GET'])
+@app.route('/auth/', methods=['GET'])
 @auth.login_required
 def get_auth_token():
     token = g.user.generate_auth_token()
@@ -101,17 +99,17 @@ class Users(Resource):
         db.session.commit()
         return {}, 201, {'Location': user.get_url()}
 
-api.add_resource(Users, 'users/')
+api.add_resource(Users, '/users/')
 
 
 class UserDetails(Resource):
     def get(self, id):
         return jsonify(User.query.get_or_404(id).export_data())
 
-api.add_resource(UserDetails, 'users/<int:id>', endpoint="user_detail")
+api.add_resource(UserDetails, '/users/<int:id>', endpoint="user_detail")
 
 
-@api_v1.route('users/<int:id>/change-password/', methods=['POST'])
+@app.route('/users/<int:id>/change-password/', methods=['POST'])
 @auth.login_required
 def user_change_password(id):
     user = User.query.get_or_404(id)
@@ -132,7 +130,7 @@ class UserWork(Resource):
         output.headers["Content-type"] = "text/csv"
         return output
 
-api.add_resource(UserWork, 'users/<int:id>/work-report.csv/')
+api.add_resource(UserWork, '/users/<int:id>/work-report.csv/')
 
 
 # RECORDS
@@ -141,10 +139,10 @@ class Records(Resource):
     def get(self):
         return jsonify({'records': [record.get_url() for record in Record.query.all()]})
 
-api.add_resource(Records, 'records/')
+api.add_resource(Records, '/records/')
 
 
-@api_v1.route('records/', methods=['POST'])
+@app.route('/records/', methods=['POST'])
 @auth.login_required
 def create_record():
     user = g.user
@@ -159,7 +157,7 @@ def create_record():
     return jsonify({}), 201, {'Location': record.get_url()}
 
 
-@api_v1.route('records/<int:id>', methods=['GET'])
+@app.route('/records/<int:id>', methods=['GET'])
 def record_detail(id):
     return jsonify(Record.query.get_or_404(id).export_data())
 
@@ -167,7 +165,7 @@ def record_detail(id):
 # PROJECTS
 
 
-@api_v1.route('projects/', methods=['POST'])
+@app.route('/projects/', methods=['POST'])
 @auth.login_required
 def create_project():
     project = Project()
@@ -177,7 +175,7 @@ def create_project():
     return jsonify({}), 201, {'Location': project.get_url()}
 
 
-@api_v1.route('projects/<int:id>', methods=['GET'])
+@app.route('/projects/<int:id>', methods=['GET'])
 @auth.login_required
 def project_detail(id):
     return jsonify(Project.query.get_or_404(id).export_data())

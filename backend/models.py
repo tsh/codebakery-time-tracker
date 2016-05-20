@@ -7,8 +7,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import relationship
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
-from . import db, create_app, api
-
+from . import db, api
 
 
 class User(db.Model):
@@ -50,7 +49,7 @@ class User(db.Model):
     # Other
 
     def get_url(self):
-        from app.api import UserDetails
+        from .views import UserDetails
         return api.url_for(UserDetails, id=self.id, _external=True)
 
     def import_data(self, data):

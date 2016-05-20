@@ -2,11 +2,11 @@ import base64
 import datetime
 import unittest
 
-from flask import url_for, json
+from flask import json
 
-from app import create_app, db, api_v1
+from app import create_app, db
 from app.models import User, Record, Project
-from app.api import app
+from . import app
 from config import TestConfig
 
 

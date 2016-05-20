@@ -17,4 +17,3 @@ class SubmitTimeForm(Form):
     ticket = IntegerField('Ticket', [validators.Optional()])
     date = DateField('Date/Time', render_kw={'type': 'date'})
     description = TextAreaField('Description')
-
