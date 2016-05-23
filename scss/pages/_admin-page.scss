@@ -1,0 +1,54 @@
+.names {
+  list-style: none;
+  padding:0;
+  margin:0;
+
+  li {
+    height:25px;
+    line-height:25px;
+    text-align: right;
+  }
+}
+
+.month-holder {
+  overflow:auto;
+  width: 100%;
+  position: relative;
+  white-space: nowrap;
+
+  .month {
+    display: inline-block;
+    padding-left:20px;
+    border-left:1px dashed #cecece;
+    margin-left:20px;
+    padding-bottom:25px;
+
+    &:first-child {
+      margin-left:0;
+      padding-left:0;
+      border: none;
+    }
+  }
+}
+
+.days {
+  overflow: hidden;
+  font-size:0;
+  line-height:0;
+  white-space: nowrap;
+
+  & > div {
+    font-size:20px;
+    line-height:25px;
+    display: inline-block;
+    box-sizing: border-box;
+    border:1px solid #cecece;
+    width: 25px;
+    height:25px;
+  }
+}
+
+select {
+  width: 100%;
+  border-radius: 0.25rem;
+}
