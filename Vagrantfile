@@ -28,47 +28,52 @@ Vagrant.configure(2) do |config|
      vb.memory = 512
   end
 
-  config.vm.provision "shell", inline: <<-SHELL
+#  config.vm.provision "shell", inline: <<-SHELL
+#
+#    sudo apt-get -y install software-properties-common python-software-properties
+#
+#    set -e
+#
+#    if [ -x /usr/local/bin/python3.5 ]; then
+#      echo 'Skipping Python installation since Python 3.5 is already installed.'
+#    else
+#      echo 'Install required libraries...'
+#      apt-get update -yq
+#      apt-get install -yq libreadline-dev libsqlite3-dev libssl-dev build-essential libtool
+#
+#      echo 'Install Python 3.5...'
+#      cd /tmp
+#      wget -O- https://www.python.org/ftp/python/3.5.1/Python-3.5.1.tgz | tar xz
+#      cd Python-3.5.1
+#      ./configure
+#      make
+#      make altinstall
+#
+#      echo 'Clean up...'
+#      cd && rm -rf /tmp/Python-3.5.1
+#
+#      echo 'Done!'
+#    fi
+#
+#    sudo apt-get -y install postgresql libpq-dev
+#    sudo -u postgres createuser vagrant
+#    sudo -u postgres createdb -O vagrant time-tracker
+#
+#    cd /vagrant
+#    sudo python3.5 -m pip install -r requirements.txt
+#
+#    sudo apt-get -y install golang
+#
+#    export PATH=$PATH:/usr/local/go/bin
+#    echo "export GOPATH=/home/vagrant/work/" >> /home/vagrant/.profile
+#    mkdir ~vagrant/work
+#
+#    go get github.com/gorilla/websocket
+#
+#  SHELL
 
-    sudo apt-get -y install software-properties-common python-software-properties
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "ansible/web.yml"
+  end
 
-    set -e
-
-    if [ -x /usr/local/bin/python3.5 ]; then
-      echo 'Skipping Python installation since Python 3.5 is already installed.'
-    else
-      echo 'Install required libraries...'
-      apt-get update -yq
-      apt-get install -yq libreadline-dev libsqlite3-dev libssl-dev build-essential libtool
-
-      echo 'Install Python 3.5...'
-      cd /tmp
-      wget -O- https://www.python.org/ftp/python/3.5.1/Python-3.5.1.tgz | tar xz
-      cd Python-3.5.1
-      ./configure
-      make
-      make altinstall
-
-      echo 'Clean up...'
-      cd && rm -rf /tmp/Python-3.5.1
-
-      echo 'Done!'
-    fi
-
-    sudo apt-get -y install postgresql libpq-dev
-    sudo -u postgres createuser vagrant
-    sudo -u postgres createdb -O vagrant time-tracker
-
-    cd /vagrant
-    sudo python3.5 -m pip install -r requirements.txt
-
-    sudo apt-get -y install golang
-
-    export PATH=$PATH:/usr/local/go/bin
-    echo "export GOPATH=/home/vagrant/work/" >> /home/vagrant/.profile
-    mkdir ~vagrant/work
-
-    go get github.com/gorilla/websocket
-
-  SHELL
 end
