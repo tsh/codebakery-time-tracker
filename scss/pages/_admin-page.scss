@@ -4,8 +4,8 @@
   margin:0;
 
   li {
-    height:25px;
-    line-height:25px;
+    height:30px;
+    line-height:30px;
     text-align: right;
   }
 }
@@ -38,14 +38,14 @@
 
   & > div {
     font-size:15px;
-    line-height:25px;
+    line-height:30px;
     display: inline-block;
     vertical-align: top;
     text-align: center;
     box-sizing: border-box;
     border:1px solid #fff;
-    width: 25px;
-    height:25px;
+    width: 30px;
+    height:30px;
     position: relative;
     overflow: visible;
     background: #ececec;
@@ -109,4 +109,35 @@ select {
 }
 .row.border {
   padding-bottom:20px;
+}
+
+//TODO refactor late
+
+.drop-holder {
+  position: relative;
+  float: right;
+
+  .export {
+    position: relative;
+
+
+    .drop-trigger {
+      display: none;
+      left:auto;
+      right:-1px;
+      margin:0;
+    }
+
+    &:hover .drop-trigger {
+      display: block;
+
+      a {
+        display: block;
+      }
+    }
+  }
+}
+.table-gap {
+  margin-top:5px;
+  float: right;
 }

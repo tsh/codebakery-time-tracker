@@ -13,6 +13,22 @@
 <div class="container-fluid wrapper">
   <div class="hor-holder border col-lg-8 col-lg-offset-2 p-t-3 p-b-3 p-l-0 p-r-0">
     <h2>Company Overview</h2>
+    <div class="row">
+        <form class="form-inline">
+            <div class="form-group col-lg-6 col-lg-offset-3 p-b-3">
+                <div class="input-group col-lg-6">
+                    <div class="input-group-addon">From</div>
+                    <input type="text" class="form-control" placeholder="Date" value="01.01.2016">
+                    <div class="input-group-addon"><img src="images/icon-calendar.png" alt="image"></div>
+                </div>
+                <div class="input-group col-lg-6">
+                    <div class="input-group-addon">To</div>
+                    <input type="text" class="form-control" placeholder="Date" value="31.03.2016">
+                    <div class="input-group-addon"><img src="images/icon-calendar.png" alt="image"></div>
+                </div>
+            </div>
+        </form>
+    </div>
     <div class="row border">
         <div class="col-lg-1">
             <h3>&nbsp;</h3>
@@ -642,23 +658,88 @@
   </div><!-- / hol-holder -->
   <div class="col-lg-6 col-lg-offset-3">
       <div class="row">
-          <h2>Projects</h2>
+          <div class="row">
+              <h2 class="p-b-2 col-lg-6 col-lg-offset-3">Projects</h2>
+              <div class=" col-lg-3">
+                  <div class="btn-group drop-holder">
+                    <a href="#" class="btn btn-primary">Export</a>
+                    <div class="btn btn-primary dropdown-toggle export">
+                        <ul class="dropdown-menu drop-trigger">
+                            <li class="dropdown-item" ><a href="#">Select All</a></li>
+                            <li class="dropdown-item" ><a href="#">Select None</a></li>
+                            <li class="dropdown-divider"></li>
+                            <li class="dropdown-item" ><a href="#">Select All Devs</a></li>
+                            <li class="dropdown-item" ><a href="#">Select None Devs</a></li>
+                            <li class="dropdown-divider"></li>
+                            <li class="dropdown-item" ><a href="#">Select All Projects</a></li>
+                            <li class="dropdown-item" ><a href="#">Select None Projects</a></li>
+                        </ul>
+                    </div>
+                  </div><!-- / drop-holder -->
+              </div>
+          </div>
           <table class="table table-bordered table-striped">
               <thead>
               <tr>
                   <th><strong>Project</strong></th>
-                  <th>Anton</th>
-                  <th>Bohdan</th>
-                  <th>Dmitry</th>
-                  <th>Vladimir</th>
-                  <th>Maxim</th>
-                  <th>Vitaly</th>
+                  <th>
+                      Anton
+                      <label class="c-input c-checkbox table-gap">
+                          <input checked type="checkbox">
+                          <span class="c-indicator"></span>
+                      </label>
+                  </th>
+                  <th>
+                      Bohdan
+                      <label class="c-input c-checkbox table-gap">
+                          <input checked type="checkbox">
+                          <span class="c-indicator"></span>
+                      </label>
+                  </th>
+                  <th>
+                      Dmitry
+                      <label class="c-input c-checkbox table-gap">
+                          <input checked type="checkbox">
+                          <span class="c-indicator"></span>
+                      </label>
+                  </th>
+                  <th>
+                      Vladimir
+                      <label class="c-input c-checkbox table-gap">
+                          <input checked type="checkbox">
+                          <span class="c-indicator"></span>
+                      </label>
+                  </th>
+                  <th>
+                      Maxim
+                      <label class="c-input c-checkbox table-gap">
+                          <input checked type="checkbox">
+                          <span class="c-indicator"></span>
+                      </label>
+                  </th>
+                  <th>
+                      Vitaly
+                      <label class="c-input c-checkbox table-gap">
+                          <input checked type="checkbox">
+                          <span class="c-indicator"></span>
+                      </label>
+                  </th>
                   <th><strong>Total:</strong></th>
               </tr>
               </thead>
               <tbody>
               <tr>
-                  <th scope="row">Melia</th>
+                  <th class="row" scope="row">
+                      <div class="col-md-10 p-l-0">
+                          Melia
+                      </div>
+                      <div class="col-md-2">
+                          <label class="c-input c-checkbox table-gap">
+                              <input checked type="checkbox">
+                              <span class="c-indicator"></span>
+                          </label>
+                      </div>
+                  </th>
                   <td>1</td>
                   <td>1</td>
                   <td>1</td>
@@ -668,7 +749,17 @@
                   <td>100500</td>
               </tr>
               <tr>
-                  <th scope="row">OO3</th>
+                  <th class="row" scope="row">
+                      <div class="col-md-10 p-l-0">
+                          OO3
+                      </div>
+                      <div class="col-md-2">
+                          <label class="c-input c-checkbox table-gap">
+                              <input checked type="checkbox">
+                              <span class="c-indicator"></span>
+                          </label>
+                      </div>
+                  </th>
                   <td>1</td>
                   <td>1</td>
                   <td>1</td>
@@ -678,7 +769,17 @@
                   <td>100500</td>
               </tr>
               <tr>
-                  <th scope="row">Internal</th>
+                  <th class="row" scope="row">
+                      <div class="col-md-10 p-l-0">
+                          Internal
+                      </div>
+                      <div class="col-md-2">
+                          <label class="c-input c-checkbox table-gap">
+                              <input checked type="checkbox">
+                              <span class="c-indicator"></span>
+                          </label>
+                      </div>
+                  </th>
                   <td>1</td>
                   <td>1</td>
                   <td>1</td>
@@ -688,7 +789,17 @@
                   <td>100500</td>
               </tr>
               <tr>
-                  <th scope="row">Oeland insulation</th>
+                  <th class="row" scope="row">
+                      <div class="col-md-10 p-l-0">
+                          Oeland insulation
+                      </div>
+                      <div class="col-md-2">
+                          <label class="c-input c-checkbox table-gap">
+                              <input checked type="checkbox">
+                              <span class="c-indicator"></span>
+                          </label>
+                      </div>
+                  </th>
                   <td>1</td>
                   <td>1</td>
                   <td>1</td>
@@ -698,7 +809,17 @@
                   <td>100500</td>
               </tr>
               <tr>
-                  <th scope="row">NoseyBoy</th>
+                  <th class="row" scope="row">
+                      <div class="col-md-10 p-l-0">
+                          NoseyBoy
+                      </div>
+                      <div class="col-md-2">
+                          <label class="c-input c-checkbox table-gap">
+                              <input checked type="checkbox">
+                              <span class="c-indicator"></span>
+                          </label>
+                      </div>
+                  </th>
                   <td>1</td>
                   <td>1</td>
                   <td>1</td>
@@ -708,7 +829,17 @@
                   <td>100500</td>
               </tr>
               <tr>
-                  <th scope="row">Swedishskills</th>
+                  <th class="row" scope="row">
+                      <div class="col-md-10 p-l-0">
+                          Swedishskills
+                      </div>
+                      <div class="col-md-2">
+                          <label class="c-input c-checkbox table-gap">
+                              <input checked type="checkbox">
+                              <span class="c-indicator"></span>
+                          </label>
+                      </div>
+                  </th>
                   <td>1</td>
                   <td>1</td>
                   <td>1</td>
@@ -718,7 +849,17 @@
                   <td>100500</td>
               </tr>
               <tr>
-                  <th scope="row">OO3D</th>
+                  <th class="row" scope="row">
+                      <div class="col-md-10 p-l-0">
+                          OO3D
+                      </div>
+                      <div class="col-md-2">
+                          <label class="c-input c-checkbox table-gap">
+                              <input checked type="checkbox">
+                              <span class="c-indicator"></span>
+                          </label>
+                      </div>
+                  </th>
                   <td>1</td>
                   <td>1</td>
                   <td>1</td>
@@ -728,7 +869,17 @@
                   <td>100500</td>
               </tr>
               <tr>
-                  <th scope="row">Oeland App</th>
+                  <th class="row" scope="row">
+                      <div class="col-md-10 p-l-0">
+                          Oeland App
+                      </div>
+                      <div class="col-md-2">
+                          <label class="c-input c-checkbox table-gap">
+                              <input checked type="checkbox">
+                              <span class="c-indicator"></span>
+                          </label>
+                      </div>
+                  </th>
                   <td>1</td>
                   <td>1</td>
                   <td>1</td>
@@ -746,7 +897,7 @@
                   <th>123</th>
                   <th>123</th>
                   <th>123</th>
-                  <th><strong>Total:</strong></th>
+                  <th><strong>4534534</strong></th>
               </tr>
           </table>
       </div>
