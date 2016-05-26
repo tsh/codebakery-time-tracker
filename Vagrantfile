@@ -74,6 +74,10 @@ Vagrant.configure(2) do |config|
 
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "ansible/web.yml"
+    ansible.groups = {
+        "vagrant" => ["default"],
+        "dev_enviroment" => ["default"]
+    }
   end
 
 end
