@@ -1,0 +1,29 @@
+---
+- name: install tar
+  apt:
+    name: tar
+    state: present
+
+- name: download golang
+  get_url:
+    url: "https://storage.googleapis.com/golang/go{{ go_version }}.linux-amd64.tar.gz"
+    dest: "/usr/local/src/go{{ go_version }}.linux-amd64.tar.gz"
+
+- name: unarchive golang
+  unarchive:
+    src: "/usr/local/src/go{{ go_version }}.linux-amd64.tar.gz"
+    dest: "{{ go_path }}"
+    copy: no
+
+- name: modify simlink
+  file:
+    src: "{{ go_path }}/go/bin/go"
+    path: /usr/local/bin/go
+    state: link
+    force: yes
+
+- name: modify env
+  lineinfile:
+    dest: /etc/environment
+    regexp: '^GOPATH='
+    line: 'GOPATH="{{ go_path }}/go/lib'

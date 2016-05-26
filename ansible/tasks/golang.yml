@@ -1,0 +1,10 @@
+---
+# This playbook will install go programming language
+
+- name: Install Go
+  hosts: all
+  tasks:
+  - name: Download the Go tarball
+    get_url: url=https://storage.googleapis.com/golang/go1.6.linux-amd64.tar.gz
+             dest=/usr/local/src/go1.6.linux-amd64.tar.gz
+             checksum=sha256:5470eac05d273c74ff8bac7bef5bad0b5abbd1c4052efbdbc8db45332e836b0b
