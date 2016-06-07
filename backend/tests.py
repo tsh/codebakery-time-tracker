@@ -4,15 +4,12 @@ import unittest
 
 from flask import json
 
-from app import create_app, db
-from app.models import User, Record, Project
-from . import app
+from api import create_app, db
+from api.models import User, Record, Project
 from config import TestConfig
 
 
 app = create_app(TestConfig())
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-app.config['SERVER_NAME'] = 'test'
 
 
 class TestUsers(unittest.TestCase):
@@ -31,7 +28,7 @@ class TestUsers(unittest.TestCase):
         user = User(username="username")
         db.session.add(user)
         db.session.commit()
-        resp = self.client.get('api/v1/users/')
+        resp = self.client.get('api/users/')
         self.assertEqual(resp.status_code, 200)
         self.assertIn(self.user.get_url(), str(resp.data))
 
