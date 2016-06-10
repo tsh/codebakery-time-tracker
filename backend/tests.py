@@ -28,7 +28,7 @@ class TestUsers(unittest.TestCase):
         user = User(username="username")
         db.session.add(user)
         db.session.commit()
-        resp = self.client.get('api/users/')
+        resp = self.client.get('api/v1/users/')
         self.assertEqual(resp.status_code, 200)
         self.assertIn(self.user.get_url(), str(resp.data))
 

@@ -106,7 +106,7 @@ class Record(db.Model):
         }
 
     def get_url(self):
-        return url_for('api_v1.record_detail', id=self.id, _external=True)
+        return url_for('record_detail', id=self.id, _external=True)
 
 
 class Project(db.Model):

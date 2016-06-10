@@ -2,6 +2,7 @@ import csv
 import io
 
 import itsdangerous
+import simplejson
 from flask import jsonify, url_for, request, g, redirect, make_response, render_template, flash, session
 from flask_httpauth import HTTPBasicAuth
 from flask_restful import Resource
@@ -79,7 +80,7 @@ def verify_password(username_or_token, password=None):
     return True
 
 
-@app.route('/auth/', methods=['GET'])
+@app.route('/api/v1/auth/', methods=['GET'])
 @auth.login_required
 def get_auth_token():
     token = g.user.generate_auth_token()
@@ -109,7 +110,7 @@ class UserDetails(Resource):
 api.add_resource(UserDetails, '/users/<int:id>', endpoint="user_detail")
 
 
-@app.route('/users/<int:id>/change-password/', methods=['POST'])
+@app.route('/api/v1/users/<int:id>/change-password/', methods=['POST'])
 @auth.login_required
 def user_change_password(id):
     user = User.query.get_or_404(id)
@@ -142,7 +143,7 @@ class Records(Resource):
 api.add_resource(Records, '/records/')
 
 
-@app.route('/records/', methods=['POST'])
+@app.route('/api/v1/records/', methods=['POST'])
 @auth.login_required
 def create_record():
     user = g.user
@@ -157,15 +158,15 @@ def create_record():
     return jsonify({}), 201, {'Location': record.get_url()}
 
 
-@app.route('/records/<int:id>', methods=['GET'])
+@app.route('/api/v1/records/<int:id>', methods=['GET'])
 def record_detail(id):
-    return jsonify(Record.query.get_or_404(id).export_data())
+    return simplejson.dumps(Record.query.get_or_404(id).export_data())
 
 
 # PROJECTS
 
 
-@app.route('/projects/', methods=['POST'])
+@app.route('/api/v1/projects/', methods=['POST'])
 @auth.login_required
 def create_project():
     project = Project()
@@ -175,7 +176,7 @@ def create_project():
     return jsonify({}), 201, {'Location': project.get_url()}
 
 
-@app.route('/projects/<int:id>', methods=['GET'])
+@app.route('/api/v1/projects/<int:id>', methods=['GET'])
 @auth.login_required
 def project_detail(id):
     return jsonify(Project.query.get_or_404(id).export_data())

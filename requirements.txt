@@ -10,4 +10,5 @@ marshmallow==2.7.3
 marshmallow-sqlalchemy==0.8.1
 #psycopg2==2.6.1
 python-dateutil==2.5.3
+simplejson==3.8.2
 WTForms==2.1
