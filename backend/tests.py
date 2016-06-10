@@ -4,9 +4,9 @@ import unittest
 
 from flask import json
 
-from api import create_app, db
-from api.models import User, Record, Project
-from config import TestConfig
+from .api import create_app, db
+from .api.models import User, Record, Project
+from .config import TestConfig
 
 
 app = create_app(TestConfig())
