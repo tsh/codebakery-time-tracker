@@ -5,9 +5,11 @@ import shutil
 import subprocess
 import click
 from flask.cli import FlaskGroup
-from backend import app, db
-from backend.models import User
+from backend.config import DevelopmentConfig
+from backend.api import db, create_app
+from backend.api.models import User
 
+app = create_app(DevelopmentConfig())
 
 cli = FlaskGroup(
     add_app_option=False,
@@ -66,6 +68,10 @@ def create_user(username):
     user.set_password(password)
     db.session.add(user)
     db.session.commit()
+    
+@cli.command()
+def run():
+    app.run(host='0.0.0.0', port=8080, debug=True)
 
 
 if __name__ == "__main__":
