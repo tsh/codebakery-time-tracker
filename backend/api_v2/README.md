@@ -1,0 +1,1 @@
+The idead behind this api is to experiment with flask and nosql storages.

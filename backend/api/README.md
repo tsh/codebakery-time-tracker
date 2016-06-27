@@ -1,0 +1,1 @@
+First version of api, used to familiarize oneself with flask. 
