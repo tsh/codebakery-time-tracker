@@ -1,3 +1,4 @@
+import json
 import unittest
 
 import flask
@@ -15,7 +16,13 @@ class TestUsers(unittest.TestCase):
 
     def test(self):
         resp = self.client.get('/')
-        import ipdb; ipdb.set_trace()
+        
+        
+    def test_get_token(self):
+        resp = self.client.post('/auth', data=json.dumps({'username': 'test', 'password': 'test'}), headers={'Content-Type': 'application/json'})
+        self.assertEqual(resp.status_code, 200, msg=str(resp.data))  
+        self.assertIn('access_token', str(resp.data))
+        
 
 
 if __name__ == '__main__':
